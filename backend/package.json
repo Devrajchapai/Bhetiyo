@@ -1,16 +1,21 @@
 {
-  "name": "backend",
+  "name": "bhetiyo-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Bhetiyo - Lost and Found Website Backend",
   "main": "index.js",
+  "types": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
+  "keywords": [
+    "lost and found"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2"
   }
 }
