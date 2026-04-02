@@ -1,14 +1,33 @@
-const http = require('node:http');
+// require ('dotenv/config'); 
+import 'dotenv/config'
+import express from 'express'
+import http from 'http'
+import { configureSocketIO } from './src/config/socketio.js'
+import { configureRoutes } from './src/routes/index.js';
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const app = new express();
+const server = http.createServer(app);
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
+//Configure routes
+configureRoutes(app)
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+//Configure middlewaress
+
+
+//Configure Socket.IO
+const io = configureSocketIO(server);
+
+
+//Start Server
+const port = process.env.PORT
+const host = process.env.HOST
+
+app.get('/',(req, res)=>{
+  res.send("TEtsing devraj")
+})
+
+server.listen(port, host, ()=>{
+  console.log(`🚀 Bhetiyo API server running at http://${host}:${port}`)
+})
+
+export {io}

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Bhetiyo - Lost and Found Website Backend",
   "main": "index.js",
-  "types": "module",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
@@ -13,9 +13,14 @@
   ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "envdot": "^0.0.3",
+    "express": "^5.2.1",
+    "http": "^0.0.1-security",
     "nodemon": "^3.1.14",
+    "socket.io": "^4.8.3",
     "ts-node": "^10.9.2"
   }
 }
