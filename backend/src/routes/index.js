@@ -1,20 +1,17 @@
-export const configureRoutes = app =>{
+export const configureRoutes = (app) => {
+  //Health check endpoint
+  app.get("/health", (req, res) => {
+    res.json({ status: "ok", server: "bhetiyo-api" });
+  });
 
-    //Health check endpoint
-    app.get('/health', (req, res)=>{
-        res.json({status: 'ok', server: 'bhetiyo-api'})
-    })
+  //API routes
 
-    //API routes
-
-
-
-    //Connection stats endpoint
-    app.get('/stats', (req, res)=>{
-        res.json({
-            status: 'ok',
-            server: 'bhetiyo-api',
-            // ... user count
-        })
-    })
-}
+  //Connection stats endpoint
+  app.get("/stats", (req, res) => {
+    res.json({
+      status: "ok",
+      server: "bhetiyo-api",
+      // ... user count
+    });
+  });
+};
