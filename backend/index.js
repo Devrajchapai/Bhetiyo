@@ -20,7 +20,7 @@ const io = configureSocketIO(server);
 DatabaseConnection();
 
 //Start Server
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 const host = process.env.HOST;
 
 server.listen(port, host, () => {
