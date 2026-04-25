@@ -3,7 +3,7 @@ import { Earth, Mail, Share2 } from "lucide-react";
 export const Footer = () => {
   return (
     <div className="w-full h-85.5 bg-[#F8FAFC] border-t border-t-[#E2E8F0]">
-      <div className="my-12 mx-8 flex gap-12 h-36 ">
+      <div className="my-12 mx-8 flex  gap-12 h-36 ">
         <div className="flex-col w-67 ">
           <div className="text-[#1E293B] font-bold mb-4 text-[20px]">
             Bhetiyo
@@ -14,7 +14,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className=" flex flex-col w-36 gap-4">
+        <div className=" flex flex-col w-67 gap-4">
           <div className=" text-[#1E293B] text-[16px] font-bold">Resources</div>
           <div className="text-[#64748B] text-[14px] flex flex-col gap-2">
             <div>How it Works</div>
@@ -24,7 +24,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-36 gap-4">
+        <div className="flex flex-col w-67 gap-4">
           <div className=" text-[#1E293B] text-[16px] font-bold">Support</div>
           <div className="text-[#64748B] text-[14px] flex flex-col gap-2">
             <div>Contact Support</div>
@@ -34,7 +34,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-36 gap-4">
+        <div className="flex flex-col w-67 gap-4">
           <div className="text-[#1E293B] text-[16px] font-bold">Legal</div>
           <div className="text-[#64748B] text-[14px] flex flex-col gap-2">
             <div>Term of Service</div>
