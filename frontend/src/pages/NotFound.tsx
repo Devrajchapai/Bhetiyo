@@ -17,9 +17,9 @@ export const NotFound = () => {
     setRandomPage(selectRandomPage);
   };
 
-  useEffect(() => {
-    randomPageSelector();
-  }, []);
+  // useEffect(() => {
+  //   randomPageSelector();
+  // }, []);
 
   return (
     <div>

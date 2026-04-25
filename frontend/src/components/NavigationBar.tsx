@@ -5,7 +5,7 @@ export const NavigationBar = () => {
   const [isUserLogedIn, setIsUserLogin] = useState(false);
   const [selectedTab, setSelectedTab] = useState<Tabs>("home");
   return (
-    <div className="mx-12.75 mt-6 h-20.5 px-8 py-4 bg-[#FFFFFF]/70 border border-[#FFFFFF]/50  rounded-full shadow-[0px_25px_50px_-12px_rgba(59,130,246,0.1)] backdrop-blur-[25px]">
+    <div className=" h-20.5 px-8 py-4 bg-[#FFFFFF]/70 border border-[#FFFFFF]/50   shadow-[0px_25px_50px_-12px_rgba(59,130,246,0.1)] backdrop-blur-[25px]">
       <div className="flex justify-between items-center">
         <div>
           <span className="w-22.5 h-8 text-[24px] text-[#2563E8]/90 font-medium">
