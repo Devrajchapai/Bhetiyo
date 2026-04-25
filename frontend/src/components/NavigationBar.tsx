@@ -5,7 +5,7 @@ export const NavigationBar = () => {
   const [isUserLogedIn, setIsUserLogin] = useState(false);
   const [selectedTab, setSelectedTab] = useState<Tabs>("home");
   return (
-    <div className="mx-12.75 mt-6 h-20.5 px-8 py-4 bg-[#FFFFFF]/70 border border-[#000000]/50  rounded-full">
+    <div className="mx-12.75 mt-6 h-20.5 px-8 py-4 bg-[#FFFFFF]/70 border border-[#FFFFFF]/50  rounded-full shadow-[0px_25px_50px_-12px_rgba(59,130,246,0.1)] backdrop-blur-[25px]">
       <div className="flex justify-between items-center">
         <div>
           <span className="w-22.5 h-8 text-[24px] text-[#2563E8]/90 font-medium">
@@ -16,27 +16,27 @@ export const NavigationBar = () => {
           </span>
         </div>
 
-        <div className="flex gap-8 h-7.5 text-[#475569] text-[14px] pb-1">
+        <div className="flex gap-8 h-7.5 text-[#475569] text-[14px] pb-1 ">
           <div
-            className={`${selectedTab === "home" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
+            className={`cursor-pointer${selectedTab === "home" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
             onClick={() => setSelectedTab("home")}
           >
             Home
           </div>
           <div
-            className={`${selectedTab === "lostitems" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
+            className={`cursor-pointer${selectedTab === "lostitems" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
             onClick={() => setSelectedTab("lostitems")}
           >
             Harayo
           </div>
           <div
-            className={`${selectedTab === "founditems" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
+            className={`cursor-pointer${selectedTab === "founditems" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
             onClick={() => setSelectedTab("founditems")}
           >
             Bhetiyo
           </div>
           <div
-            className={`${selectedTab === "community" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
+            className={`cursor-pointer${selectedTab === "community" ? "text-[#2563EB] border-b-2 border-[#2563E8] " : ""}`}
             onClick={() => setSelectedTab("community")}
           >
             Community
@@ -45,11 +45,11 @@ export const NavigationBar = () => {
 
         <div>
           {!isUserLogedIn ? (
-            <div className="flex flex-col h-9.5 w-27 justify-center items-center p-0.5 hover:bg-black/10 hover:text[#FFFFFF] hover:rounded-full">
-              <div className="text-xs">Connect</div>
-              <div className="text-[8px] ">
+            <div className="flex flex-col h-9.5 w-27 justify-center items-center p-0.5 hover:backdrop-blur-[25px] cursor-pointer">
+              <div className="text-xs hover:text-[10px]">Connect</div>
+              <div className="text-[8px]  hover:text-[]6px">
                 with{" "}
-                <span className="text-[10px] text-[#2563EB] font-medium ">
+                <span className="text-[10px] hover:text-[8px] text-[#2563EB] font-medium ">
                   Bhetiyo
                 </span>
               </div>
