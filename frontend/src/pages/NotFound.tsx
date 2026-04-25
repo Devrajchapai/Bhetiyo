@@ -9,7 +9,7 @@ import { Variant_4 } from "./404/Variant_4.tsx";
 import { Variant_5 } from "./404/Variant_5.tsx";
 import { Variant_6 } from "./404/Variant_6.tsx";
 export const NotFound = () => {
-  const [randomPage, setRandomPage] = useState(0);
+  const [randomPage, setRandomPage] = useState(1);
   const MaxPage = 6;
 
   const randomPageSelector = () => {
