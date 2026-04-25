@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Home, PlusCircle, Search, Map, HelpCircle } from "lucide-react";
-import { Variant_0 } from "./Variant_0";
 
 function CompassSVG() {
   return (
@@ -207,27 +206,6 @@ function CompassSVG() {
     </svg>
   );
 }
-
-const QUICK_LINKS = [
-  {
-    icon: <Search className="w-4 h-4 text-emerald-600" />,
-    bg: "bg-emerald-50",
-    title: "Find Items",
-    desc: "Browse recent discoveries in your area.",
-  },
-  {
-    icon: <Map className="w-4 h-4 text-amber-600" />,
-    bg: "bg-amber-50",
-    title: "Area Map",
-    desc: "See lost markers on our community map.",
-  },
-  {
-    icon: <HelpCircle className="w-4 h-4 text-blue-600" />,
-    bg: "bg-blue-50",
-    title: "Help Center",
-    desc: "Get tips on how to recover your property.",
-  },
-];
 
 export const Variant_3 = () => {
   const [mounted, setMounted] = useState(false);
