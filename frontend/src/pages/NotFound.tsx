@@ -10,7 +10,7 @@ import { Variant_5 } from "./404/Variant_5.tsx";
 import { Variant_6 } from "./404/Variant_6.tsx";
 export const NotFound = () => {
   const [randomPage, setRandomPage] = useState(0);
-  const MaxPage = 6;
+  const MaxPage = 7;
 
   const randomPageSelector = () => {
     const selectRandomPage = Math.floor(Math.random() * MaxPage); //starts from 0
