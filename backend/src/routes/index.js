@@ -1,3 +1,5 @@
+import auth from "./auth.js";
+
 export const configureRoutes = (app) => {
   //Health check endpoint
   app.get("/health", (req, res) => {
@@ -5,6 +7,7 @@ export const configureRoutes = (app) => {
   });
 
   //API routes
+  app.use("/auth", auth);
 
   //Connection stats endpoint
   app.get("/stats", (req, res) => {
