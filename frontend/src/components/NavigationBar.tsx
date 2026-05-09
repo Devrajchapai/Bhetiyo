@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CircleUser, Search } from "lucide-react";
+import { SignUp } from "./Signup";
 
 type Tabs = "home" | "item" | "community";
 
@@ -12,9 +13,10 @@ const NAV_ITEMS: { id: Tabs; label: string; navigateTo: string }[] = [
 export const NavigationBar = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [selectedTab, setSelectedTab] = useState<Tabs>("home");
+  const [showSignup, setShowSignUp] = useState(false)
 
   return (
-    <nav className="sticky top-0 z-50 h-16 px-6 bg-white/75 border-b border-slate-200/60 backdrop-blur-xl shadow-[0_2px_16px_-2px_rgba(37,99,235,0.07)]">
+    <div className="sticky top-0 z-50 h-16 px-6 bg-white/75 border-b border-slate-200/60 backdrop-blur-xl shadow-[0_2px_16px_-2px_rgba(37,99,235,0.07)]">
       <div className="flex items-center justify-between h-full max-w-6xl mx-auto gap-6">
         {/* Logo */}
         <div className="flex items-baseline gap-1.5 shrink-0">
@@ -64,11 +66,12 @@ export const NavigationBar = () => {
           {/* User */}
           {!isUserLoggedIn ? (
             <button
-              onClick={() => setIsUserLoggedIn(true)}
+              onClick={()=>{setShowSignUp(true)}}
               className="group flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 shadow-sm"
             >
               <CircleUser
                 size={15}
+                
                 className="text-slate-400 group-hover:text-blue-500 transition-colors"
               />
               <span className="text-xs font-medium text-slate-500 group-hover:text-blue-600 transition-colors">
@@ -77,14 +80,17 @@ export const NavigationBar = () => {
             </button>
           ) : (
             <button
-              onClick={() => setIsUserLoggedIn(false)}
+              // onClick={() => setIsUserLoggedIn(false)}
               className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors duration-200"
             >
               <CircleUser size={20} className="text-slate-600" />
             </button>
           )}
         </div>
+
+          
+
       </div>
-    </nav>
+    </div>
   );
 };
