@@ -1,5 +1,7 @@
 import { Home } from "@/pages/Home.tsx";
 import { NotFound } from "@/pages/NotFound.tsx";
+import { useNavigationBar } from "@/store/ui/navigationBar";
+import { Loader } from "lucide-react";
 
 export const routes = [
   {
@@ -7,5 +9,8 @@ export const routes = [
     element: <Home />,
   },
 
-  { path: "*", element: <NotFound /> },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ];

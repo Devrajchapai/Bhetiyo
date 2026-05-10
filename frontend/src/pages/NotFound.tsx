@@ -8,7 +8,11 @@ import { Variant_3 } from "./404/Variant_3.tsx";
 import { Variant_4 } from "./404/Variant_4.tsx";
 import { Variant_5 } from "./404/Variant_5.tsx";
 import { Variant_6 } from "./404/Variant_6.tsx";
+import { useNavigationBar } from "@/store/ui/navigationBar.tsx";
+import { SignUp } from "@/components/Signup.tsx";
+
 export const NotFound = () => {
+  const changeTab = useNavigationBar((state) => state.changeTab);
   const [randomPage, setRandomPage] = useState(0);
   const MaxPage = 7;
 
@@ -18,11 +22,13 @@ export const NotFound = () => {
   };
 
   useEffect(() => {
+    changeTab("");
     randomPageSelector();
   }, []);
 
   return (
     <div>
+      <SignUp />
       <NavigationBar />
       {randomPage == 0 ? (
         <Variant_0 />

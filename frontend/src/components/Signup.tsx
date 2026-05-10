@@ -1,13 +1,85 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { HandHeart, X } from "lucide-react";
+import { useNavigationBar } from "@/store/ui/navigationBar";
+
+const BHETIYO_MEMENTO = [
+  {
+    headline: "Every lost item has a story",
+    subtext:
+      "Join Bhetiyo and help us give those stories a happy ending. Together, we bring cherished memories home.",
+  },
+
+  {
+    headline: "Be the reason someone finds hope",
+    subtext:
+      "Become part of the Bhetiyo community and help reunite people with what they love. Your small act can make a big difference.",
+  },
+
+  {
+    headline: "Start your story with us",
+    subtext: "Join the Bhetiyo community and help bring lost items home",
+  },
+
+  {
+    headline: "Turning 'Lost' into 'Found'",
+    subtext:
+      "Join Bhetiyo today to help bridge the gap between lost belongings and their rightful owners.",
+  },
+  {
+    headline: "Find peace of mind with Bhetiyo",
+    subtext:
+      "Whether youve lost a treasure or found a memory, join us to help make the world a little more connected.",
+  },
+  {
+    headline: "Your safety net for the things you love",
+    subtext:
+      "Join Bhetiyo and be the hero who helps a neighbor find what they've lost. Let's make the world feel a little smaller.",
+  },
+  {
+    headline: "Help a memory find its way home",
+    subtext:
+      "Behind every lost item is a story waiting for a happy ending. Become part of the community that makes it happen.",
+  },
+  {
+    headline: "Join the search. Be the find.",
+    subtext:
+      "Millions of items are lost every day. Join Bhetiyo and help us bring them back to where they belong.",
+  },
+  {
+    headline: "A community built on care",
+    subtext:
+      "Connect with Bhetiyo and help us create a safer, more connected way to find what's missing.",
+  },
+  {
+    headline: "Bring it back home",
+    subtext:
+      "Join Bhetiyo and help reunite people with their most cherished belongings.",
+  },
+];
 
 export const SignUp = () => {
+  const signingUp = useNavigationBar((state) => state.signingUp);
+
+  const [displayHeadline, setDisplayHeadline] = useState(
+    BHETIYO_MEMENTO[0].headline,
+  );
+
+  const [displayMemento, setDisplayMemento] = useState(
+    BHETIYO_MEMENTO[0].subtext,
+  );
+
   const handleGoogleAuth = () => {
-    console.log("this is called");
     const backendURL = import.meta.env.VITE_API_URL;
     window.location.href = `${backendURL}/auth/google`;
   };
+
+  useEffect(() => {
+    const rand = Math.floor(Math.random() * BHETIYO_MEMENTO.length);
+    setDisplayHeadline(BHETIYO_MEMENTO[rand].headline);
+    setDisplayMemento(BHETIYO_MEMENTO[rand].subtext);
+  }, []);
+
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       {/* Added my-2.5 for that 10px top/bottom margin requirement */}
@@ -16,7 +88,7 @@ export const SignUp = () => {
           variant="ghost"
           size="lg"
           className="absolute right-4 top-4 bg-none"
-          // onClick={() => setModalType(null)}
+          onClick={() => signingUp()} // close oauth menu
         >
           <X />
         </Button>
@@ -26,10 +98,8 @@ export const SignUp = () => {
           <div className="flex justify-center items-center size-16 border rounded-full mb-4">
             <HandHeart size={30} className="text-rose-500" />
           </div>
-          <h2 className="text-xl font-semibold">Start your story with us</h2>
-          <p className="text-gray-600 mt-2">
-            Join the Bhetiyo community and help bring lost items home
-          </p>
+          <h2 className="text-xl font-semibold">{displayHeadline}</h2>
+          <p className="text-gray-600 mt-2">{displayMemento}</p>
         </div>
 
         <div className="space-y-4">
