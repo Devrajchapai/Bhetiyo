@@ -59,6 +59,7 @@ const BHETIYO_MEMENTO = [
 ];
 
 export const SignUp = () => {
+  const isSigningUp = useNavigationBar((state) => state.isSigningUp);
   const signingUp = useNavigationBar((state) => state.signingUp);
 
   const [displayHeadline, setDisplayHeadline] = useState(
@@ -79,6 +80,11 @@ export const SignUp = () => {
     setDisplayHeadline(BHETIYO_MEMENTO[rand].headline);
     setDisplayMemento(BHETIYO_MEMENTO[rand].subtext);
   }, []);
+
+  // place it right above return and below all the hooks
+  // the number of hook calls should be same for every rerender
+  // Could cause early return
+  if (!isSigningUp) return; // hide oauth menu
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
