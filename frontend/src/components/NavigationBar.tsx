@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CircleUser, Search } from "lucide-react";
 import { SignUp } from "./Signup";
+import { useNavigationBar } from "@/store/ui/navigationBar";
 
 type Tabs = "home" | "item" | "community";
 
@@ -11,9 +12,13 @@ const NAV_ITEMS: { id: Tabs; label: string; navigateTo: string }[] = [
 ];
 
 export const NavigationBar = () => {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<Tabs>("home");
-  const [showSignup, setShowSignUp] = useState(false)
+  // variables
+  const currentTab = useNavigationBar((state) => state.currentTab);
+  const isConnected = useNavigationBar((state) => state.isConnected);
+
+  //actions
+  const changeTab = useNavigationBar((state) => state.changeTab);
+  const signingUp = useNavigationBar((state) => state.signingUp);
 
   return (
     <div className="sticky top-0 z-50 h-16 px-6 bg-white/75 border-b border-slate-200/60 backdrop-blur-xl shadow-[0_2px_16px_-2px_rgba(37,99,235,0.07)]">
@@ -31,12 +36,12 @@ export const NavigationBar = () => {
         {/* Nav tabs */}
         <div className="flex items-center gap-0.5">
           {NAV_ITEMS.map(({ id, label, navigateTo }) => {
-            const active = selectedTab === id;
+            const active = currentTab === id;
             return (
               <button
                 key={id}
                 onClick={() => {
-                  setSelectedTab(id);
+                  changeTab(id);
                   navigation.navigate(navigateTo);
                 }}
                 className={`relative px-4 py-1.5 text-[13.5px] font-medium rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap
@@ -64,14 +69,17 @@ export const NavigationBar = () => {
           </button>
 
           {/* User */}
-          {!isUserLoggedIn ? (
+          {!isConnected ? (
             <button
-              onClick={()=>{setShowSignUp(true)}}
+              onClick={() => {
+                // opens oauth authentication
+                signingUp();
+                console.log("oAuth connection is trigger");
+              }}
               className="group flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 shadow-sm"
             >
               <CircleUser
                 size={15}
-                
                 className="text-slate-400 group-hover:text-blue-500 transition-colors"
               />
               <span className="text-xs font-medium text-slate-500 group-hover:text-blue-600 transition-colors">
@@ -80,16 +88,17 @@ export const NavigationBar = () => {
             </button>
           ) : (
             <button
-              // onClick={() => setIsUserLoggedIn(false)}
+              onClick={() => {
+                // ... change here
+                // ... navigate to user profile
+                console.log("user is connected");
+              }}
               className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors duration-200"
             >
               <CircleUser size={20} className="text-slate-600" />
             </button>
           )}
         </div>
-
-          
-
       </div>
     </div>
   );
