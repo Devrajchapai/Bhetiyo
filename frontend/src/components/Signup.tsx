@@ -79,7 +79,7 @@ export const SignUp = () => {
     const rand = Math.floor(Math.random() * BHETIYO_MEMENTO.length);
     setDisplayHeadline(BHETIYO_MEMENTO[rand].headline);
     setDisplayMemento(BHETIYO_MEMENTO[rand].subtext);
-  }, []);
+  }, [isSigningUp]);
 
   // place it right above return and below all the hooks
   // the number of hook calls should be same for every rerender
