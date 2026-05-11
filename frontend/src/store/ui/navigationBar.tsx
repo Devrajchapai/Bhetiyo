@@ -17,9 +17,10 @@ export const useNavigationBar = create<NavigationBarType>()(
       changeTab: (newTab) => set({ currentTab: newTab }),
     }),
     {
-      name: "navigationBar-storage",
+      name: "navigationBar-sessionStorage",
+      storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
-        //only store this values in localStorage
+        //only store this values
         isConnected: state.isConnected,
         isSigningUp: state.isSigningUp,
         currentTab: state.currentTab,
