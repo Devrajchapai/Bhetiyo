@@ -1,6 +1,13 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { NavigationBarType } from "@/types/ui/components/navigation_bar.ts";
+
+interface NavigationBarType {
+  isSigningUp: boolean;
+  currentTab: string | null;
+
+  signingUp: () => void;
+  changeTab: (newTab: string) => void;
+}
 
 export const useNavigationBar = create<NavigationBarType>()(
   persist(
@@ -11,18 +18,15 @@ export const useNavigationBar = create<NavigationBarType>()(
       currentTab: "",
 
       //actions
-      connect: () => set({ isConnected: true }),
-      disconnect: () => set({ isConnected: false }),
       signingUp: () => set((state) => ({ isSigningUp: !state.isSigningUp })),
       changeTab: (newTab) => set({ currentTab: newTab }),
     }),
     {
-      name: "navigationBar-sessionStorage",
+      name: "navigationbar-sessionstorage",
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         //only store this values
-        isConnected: state.isConnected,
-        isSigningUp: state.isSigningUp,
+
         currentTab: state.currentTab,
       }),
     },

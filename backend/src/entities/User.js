@@ -10,17 +10,33 @@ const User = new EntitySchema({
       generated: "increment",
     },
 
+    externalId: {
+      type: "varchar",
+      nullable: false,
+    },
+
     name: {
       type: "varchar",
-      length: 255,
+      length: 50,
       nullable: false,
     },
 
     email: {
       type: "varchar",
-      length: 255,
       nullable: false,
       unique: true,
+    },
+
+    source: {
+      type: "varchar",
+      // enum: ["google", "facebook", "tiktok"],
+      nullable: false,
+    },
+
+    gender: {
+      type: "varchar",
+      num: ["male", "female", "other"],
+      nullable: true,
     },
 
     created_at: {

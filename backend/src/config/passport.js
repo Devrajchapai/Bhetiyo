@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
-let users = [];
 passport.use(
   new GoogleStrategy(
     {
@@ -9,22 +8,17 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SERECT,
       callbackURL: `${process.env.GOOGLE_CALLBACK_URL}`,
     },
-    (accessToken, refreshToken, profile, done) => {
-      const newUser = {
-        googleId: profile.id,
+    async (accessToken, refreshToken, profile, done) => {
+      const userData = {
+        accessToken,
+        refreshToken,
+        externalId: profile.id, //Googleid
         displayName: profile.displayName,
         email: profile.emails?.[0]?.value || null,
+        provider: "google",
       };
 
-      // Push to your local array for tracking
-      users.push(newUser);
-
-      console.log("Logged in user:");
-      console.table(newUser);
-      console.table("Access Token: " + accessToken);
-      console.table("refresh Token: " + refreshToken);
-
-      return done(null, newUser);
+      return done(null, userData);
     },
   ),
 );

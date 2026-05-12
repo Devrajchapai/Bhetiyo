@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { HandHeart, X } from "lucide-react";
-import { useNavigationBar } from "@/store/ui/navigationBar";
+import { useNavigationBar } from "@/store/ui/navigationbar";
 
 const BHETIYO_MEMENTO = [
   {

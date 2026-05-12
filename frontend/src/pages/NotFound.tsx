@@ -8,7 +8,7 @@ import { Variant_3 } from "./404/Variant_3.tsx";
 import { Variant_4 } from "./404/Variant_4.tsx";
 import { Variant_5 } from "./404/Variant_5.tsx";
 import { Variant_6 } from "./404/Variant_6.tsx";
-import { useNavigationBar } from "@/store/ui/navigationBar.tsx";
+import { useNavigationBar } from "@/store/ui/navigationbar.tsx";
 import { SignUp } from "@/components/Signup.tsx";
 
 export const NotFound = () => {
@@ -27,9 +27,10 @@ export const NotFound = () => {
   }, []);
 
   return (
-    <div>
+    <div className="h-full">
       <SignUp />
       <NavigationBar />
+
       {randomPage == 0 ? (
         <Variant_0 />
       ) : randomPage == 1 ? (

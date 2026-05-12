@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { CircleUser, Search } from "lucide-react";
 import { SignUp } from "./Signup";
-import { useNavigationBar } from "@/store/ui/navigationBar";
+import { useNavigationBar } from "@/store/ui/navigationbar";
+import { useAuth } from "@/store/data/auth";
 
 type Tabs = "home" | "item" | "community";
 
@@ -14,7 +15,7 @@ const NAV_ITEMS: { id: Tabs; label: string; navigateTo: string }[] = [
 export const NavigationBar = () => {
   // variables
   const currentTab = useNavigationBar((state) => state.currentTab);
-  const isConnected = useNavigationBar((state) => state.isConnected);
+  const isConnected = useAuth((state) => state.isConnected);
 
   //actions
   const changeTab = useNavigationBar((state) => state.changeTab);

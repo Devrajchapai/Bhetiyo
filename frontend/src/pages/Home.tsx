@@ -10,6 +10,7 @@ import {
   Search,
   Trophy,
 } from "lucide-react";
+import { useEffect } from "react";
 
 const recentItems = [
   {
@@ -177,6 +178,9 @@ const metrics = [
 ];
 
 export const Home = () => {
+  useEffect(() => {
+    document.title = "Bhetiyo";
+  }, []);
   return (
     <div>
       {/* all the logic are defined inside of the SignUp.tsx file  */}
