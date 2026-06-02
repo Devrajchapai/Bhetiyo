@@ -28,9 +28,6 @@ export const NotFound = () => {
 
   return (
     <div className="h-full">
-      <SignUp />
-      <NavigationBar />
-
       {randomPage == 0 ? (
         <Variant_0 />
       ) : randomPage == 1 ? (
@@ -48,7 +45,6 @@ export const NotFound = () => {
       ) : (
         <Variant_0 />
       )}
-      <Footer />
     </div>
   );
 };

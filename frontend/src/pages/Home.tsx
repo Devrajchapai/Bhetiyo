@@ -1,7 +1,10 @@
+import { Card } from "@/components/Card";
 import { Footer } from "@/components/Footer";
 import { NavigationBar } from "@/components/NavigationBar";
 import { SignUp } from "@/components/Signup";
 import { Button } from "@/components/ui/button";
+import { Items, metrics, topContributors } from "@/data/staticData";
+import { useNavigationBar } from "@/store/ui/navigationbar";
 import {
   BadgeCheck,
   CirclePlus,
@@ -12,181 +15,14 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 
-const recentItems = [
-  {
-    id: 1,
-    type: "FOUND",
-    category: "Electronics",
-    title: "Bose QuietComfort 45",
-    location: "Central Park, NYC",
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80",
-    buttonText: "That's mine!",
-  },
-  {
-    id: 2,
-    type: "FOUND",
-    category: "Personal",
-    title: "Leather Bi-fold Wallet",
-    location: "Grand Central Terminal",
-    image:
-      "https://images.unsplash.com/photo-1627123430985-71d464a0b89a?auto=format&fit=crop&q=80",
-    buttonText: "That's mine!",
-  },
-  {
-    id: 3,
-    type: "LOST",
-    category: "Apparel",
-    title: "Red Nike Air Max",
-    location: "Riverside Drive",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80",
-    buttonText: "Found this?",
-  },
-  {
-    id: 4,
-    type: "FOUND",
-    category: "Electronics",
-    title: "Vintage Leica M6",
-    location: "Botanical Gardens",
-    image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80",
-    buttonText: "That's mine!",
-  },
-  {
-    id: 5,
-    type: "FOUND",
-    category: "Electronics",
-    title: "Bose QuietComfort 45",
-    location: "Central Park, NYC",
-    image:
-      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80",
-    buttonText: "That's mine!",
-  },
-  {
-    id: 6,
-    type: "FOUND",
-    category: "Personal",
-    title: "Leather Bi-fold Wallet",
-    location: "Grand Central Terminal",
-    image:
-      "https://images.unsplash.com/photo-1627123430985-71d464a0b89a?auto=format&fit=crop&q=80",
-    buttonText: "That's mine!",
-  },
-  {
-    id: 7,
-    type: "LOST",
-    category: "Apparel",
-    title: "Red Nike Air Max",
-    location: "Riverside Drive",
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80",
-    buttonText: "Found this?",
-  },
-  {
-    id: 8,
-    type: "FOUND",
-    category: "Electronics",
-    title: "Vintage Leica M6",
-    location: "Botanical Gardens",
-    image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80",
-    buttonText: "That's mine!",
-  },
-];
-
-const topContributors = [
-  {
-    name: "David Chen",
-    role: "Gold Contributor",
-    lost: 12,
-    found: 45,
-    points: "2,450",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=david",
-  },
-  {
-    name: "Sarah Jenkins",
-    role: "Silver Contributor",
-    lost: 5,
-    found: 38,
-    points: "1,920",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=sarah",
-  },
-  {
-    name: "Marcus Thorne",
-    role: "Silver Contributor",
-    lost: 8,
-    found: 31,
-    points: "1,580",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=marcus",
-  },
-  {
-    name: "David Chen",
-    role: "Gold Contributor",
-    lost: 12,
-    found: 45,
-    points: "2,450",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=david",
-  },
-  {
-    name: "Sarah Jenkins",
-    role: "Silver Contributor",
-    lost: 5,
-    found: 38,
-    points: "1,920",
-    avatar: "https://api.dicebear.com/9.x/notionists/svg?seed=sarah",
-  },
-  {
-    name: "Marcus Thorne",
-    role: "Silver Contributor",
-    lost: 8,
-    found: 31,
-    points: "1,580",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=marcus",
-  },
-  {
-    name: "David Chen",
-    role: "Gold Contributor",
-    lost: 12,
-    found: 45,
-    points: "2,450",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=david",
-  },
-  {
-    name: "Sarah Jenkins",
-    role: "Silver Contributor",
-    lost: 5,
-    found: 38,
-    points: "1,920",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=sarah",
-  },
-  {
-    name: "Marcus Thorne",
-    role: "Silver Contributor",
-    lost: 8,
-    found: 31,
-    points: "1,580",
-    avatar: "https://api.dicebear.com/8.x/notionists/svg?seed=marcus",
-  },
-];
-
-const metrics = [
-  { value: "12k+", label: "Returned", icon: "Target", color: "text-blue-600" },
-  { value: "85%", label: "Success", icon: "Zap", color: "text-emerald-600" },
-  { value: "24h", label: "Avg. Time", icon: "Clock", color: "text-slate-600" },
-  { value: "50k", label: "Active", icon: "Users", color: "text-orange-500" },
-];
-
 export const Home = () => {
+  const changeTab = useNavigationBar((state) => state.changeTab);
+
   useEffect(() => {
-    document.title = "Bhetiyo";
+    changeTab("home");
   }, []);
   return (
     <div>
-      {/* all the logic are defined inside of the SignUp.tsx file  */}
-      <NavigationBar />
-      <SignUp />
-
       {/* Home contains  */}
       <div className="mx-6 md:mx-10 mt-14 mb-20">
         {/* Introduction section */}
@@ -298,54 +134,8 @@ export const Home = () => {
 
         {/* X-Axis Scrollable Container */}
         <div className="flex overflow-x-auto pb-8 gap-6 snap-x snap-mandatory no-scrollbar">
-          {recentItems.map((item) => (
-            <div
-              key={item.id}
-              className="snap-start flex-shrink-0 w-[280px] md:w-[320px] group bg-white rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
-            >
-              {/* Image Container */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                {/* Badge Overlay */}
-                <div className="absolute top-4 left-4">
-                  <span
-                    className={`text-[10px] font-bold px-3 py-1 rounded-full text-white tracking-wider ${
-                      item.type === "FOUND"
-                        ? "bg-emerald-500/90"
-                        : "bg-orange-500/90"
-                    }`}
-                  >
-                    {item.type}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content Area */}
-              <div className="p-5 space-y-3">
-                <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
-                  {item.category}
-                </span>
-                <h3 className="font-bold text-slate-800 text-lg leading-tight line-clamp-1">
-                  {item.title}
-                </h3>
-
-                <div className="flex items-center gap-1.5 text-slate-400 text-sm">
-                  <MapPin size={14} className="flex-shrink-0" />
-                  <span className="truncate">{item.location}</span>
-                </div>
-
-                <Button
-                  variant="outline"
-                  className="w-full rounded-2xl border-blue-100 text-blue-600 font-bold hover:bg-blue-50 hover:text-blue-700 transition-colors py-5"
-                >
-                  {item.buttonText}
-                </Button>
-              </div>
-            </div>
+          {Items.map((item) => (
+            <Card item={item} />
           ))}
         </div>
       </section>
@@ -444,8 +234,6 @@ export const Home = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

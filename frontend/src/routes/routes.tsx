@@ -1,5 +1,6 @@
 import AuthCallBack from "@/components/AuthCallBack.jsx";
 import { Home } from "@/pages/Home.tsx";
+import { LostAndFound } from "@/pages/LostAndFound";
 import { NotFound } from "@/pages/NotFound.tsx";
 import { useNavigationBar } from "@/store/ui/navigationbar";
 import { Loader } from "lucide-react";
@@ -12,6 +13,11 @@ export const routes = [
   {
     path: "/",
     element: <Home />,
+  },
+
+  {
+    path: "/items",
+    element: <LostAndFound />,
   },
 
   {

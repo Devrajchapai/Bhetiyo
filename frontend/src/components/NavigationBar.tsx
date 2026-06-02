@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CircleUser, Search } from "lucide-react";
+import { Bell, BellDot, BellRing, CircleUser, Search } from "lucide-react";
 import { SignUp } from "./Signup";
 import { useNavigationBar } from "@/store/ui/navigationbar";
 import { useAuth } from "@/store/data/auth";
@@ -8,7 +8,7 @@ type Tabs = "home" | "item" | "community";
 
 const NAV_ITEMS: { id: Tabs; label: string; navigateTo: string }[] = [
   { id: "home", label: "Home", navigateTo: "/" },
-  { id: "item", label: "Lost & Found", navigateTo: "bhetiyo" },
+  { id: "item", label: "Lost & Found", navigateTo: "items" },
   { id: "community", label: "Community", navigateTo: "community" },
 ];
 
@@ -21,14 +21,21 @@ export const NavigationBar = () => {
   const changeTab = useNavigationBar((state) => state.changeTab);
   const signingUp = useNavigationBar((state) => state.signingUp);
 
+  const [notification, setNotification] = useState(21);
+
   return (
     <div className="sticky top-0 z-50 h-16 px-6 bg-white/75 border-b border-slate-200/60 backdrop-blur-xl shadow-[0_2px_16px_-2px_rgba(37,99,235,0.07)]">
       <div className="flex items-center justify-between h-full max-w-6xl mx-auto gap-6">
         {/* Logo */}
         <div className="flex items-baseline gap-1.5 shrink-0">
-          <span className="text-[22px] font-semibold text-blue-600 tracking-tight leading-none">
+          <button
+            className="text-[22px] font-semibold text-blue-600 tracking-tight leading-none cursor-pointer"
+            onClick={() => {
+              navigation.navigate("/");
+            }}
+          >
             Bhetiyo
-          </span>
+          </button>
           <span className="text-[10px] text-slate-400 font-normal leading-none pb-0.5">
             Restoring Faith
           </span>
@@ -63,7 +70,29 @@ export const NavigationBar = () => {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-6 shrink-0">
+          {notification > 0 ? (
+            <div className="flex w-fit h-fit">
+              {notification > 9 ? (
+                <>
+                  <BellRing size={20} className="text-slate-700" />
+                  <span className="relative -top-3 -right-0.5 bg-red-500 text-[10px] font-bold text-white ring-2 ring-white rounded-full h-5 w-5 flex justify-center items-center">
+                    9+
+                  </span>
+                </>
+              ) : (
+                <>
+                  <BellDot size={20} className="text-slate-700" />
+                  <span className="relative -top-3 -right-0.5 bg-red-500 text-[10px] font-bold text-white ring-2 ring-white rounded-full h-5 w-5 flex justify-center items-center">
+                    {notification}
+                  </span>
+                </>
+              )}
+            </div>
+          ) : (
+            <Bell size={20} />
+          )}
+
           {/* Report a Find CTA */}
           <button className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-semibold shadow-sm shadow-blue-200 transition-all duration-200">
             Report a Find
