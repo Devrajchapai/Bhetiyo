@@ -1,11 +1,16 @@
 import { Card } from "@/components/Card";
 import { Items } from "@/data/staticData";
+import { useReportItemModal } from "@/store/ui/modals";
 import { useNavigationBar } from "@/store/ui/navigationbar";
 import { AlertTriangle, ListFilter, PlusCircle, Search, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 export const LostAndFound = () => {
   const changeTab = useNavigationBar((state) => state.changeTab);
+  const openReportItemModel = useReportItemModal(
+    (state) => state.openReportItemModel,
+  );
+  const setAction = useReportItemModal((state) => state.setAction);
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
@@ -50,7 +55,13 @@ export const LostAndFound = () => {
 
         {/* Right Interactive Actions Section */}
         <div className="flex items-center gap-4 sm:gap-6 self-start md:self-auto shrink-0">
-          <button className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]">
+          <button
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
+            onClick={() => {
+              setAction("found");
+              openReportItemModel();
+            }}
+          >
             <PlusCircle className="w-4 h-4" />
             <span>Post Found</span>
           </button>

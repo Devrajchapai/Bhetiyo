@@ -3,6 +3,7 @@ import { Bell, BellDot, BellRing, CircleUser, Search } from "lucide-react";
 import { SignUp } from "./Signup";
 import { useNavigationBar } from "@/store/ui/navigationbar";
 import { useAuth } from "@/store/data/auth";
+import { useReportItemModal } from "@/store/ui/modals";
 
 type Tabs = "home" | "item" | "community";
 
@@ -13,13 +14,15 @@ const NAV_ITEMS: { id: Tabs; label: string; navigateTo: string }[] = [
 ];
 
 export const NavigationBar = () => {
-  // variables
   const currentTab = useNavigationBar((state) => state.currentTab);
   const isConnected = useAuth((state) => state.isConnected);
-
-  //actions
   const changeTab = useNavigationBar((state) => state.changeTab);
   const signingUp = useNavigationBar((state) => state.signingUp);
+
+  const openReportItemModel = useReportItemModal(
+    (state) => state.openReportItemModel,
+  );
+  const setAction = useReportItemModal((state) => state.setAction);
 
   const [notification, setNotification] = useState(21);
 
@@ -94,8 +97,14 @@ export const NavigationBar = () => {
           )}
 
           {/* Report a Find CTA */}
-          <button className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-semibold shadow-sm shadow-blue-200 transition-all duration-200">
-            Report a Find
+          <button
+            className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-semibold shadow-sm shadow-blue-200 transition-all duration-200"
+            onClick={() => {
+              setAction("lost");
+              openReportItemModel();
+            }}
+          >
+            Report a Lost
           </button>
 
           {/* User */}

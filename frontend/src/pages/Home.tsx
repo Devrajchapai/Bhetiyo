@@ -4,6 +4,7 @@ import { NavigationBar } from "@/components/NavigationBar";
 import { SignUp } from "@/components/Signup";
 import { Button } from "@/components/ui/button";
 import { Items, metrics, topContributors } from "@/data/staticData";
+import { useReportItemModal } from "@/store/ui/modals";
 import { useNavigationBar } from "@/store/ui/navigationbar";
 import {
   BadgeCheck,
@@ -17,6 +18,10 @@ import { useEffect } from "react";
 
 export const Home = () => {
   const changeTab = useNavigationBar((state) => state.changeTab);
+  const openReportItemModel = useReportItemModal(
+    (state) => state.openReportItemModel,
+  );
+  const setAction = useReportItemModal((state) => state.setAction);
 
   useEffect(() => {
     changeTab("home");
@@ -58,6 +63,10 @@ export const Home = () => {
                 size="lg"
                 variant="outline"
                 className="rounded-full px-8 gap-2 border-slate-200 text-slate-700 hover:bg-slate-50"
+                onClick={() => {
+                  setAction("found");
+                  openReportItemModel();
+                }}
               >
                 <CirclePlus size={18} />
                 Report Found Item

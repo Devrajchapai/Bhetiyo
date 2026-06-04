@@ -4,6 +4,7 @@ import { routes } from "./routes/routes.js";
 import { NavigationBar } from "./components/NavigationBar.js";
 import { Footer } from "./components/Footer.js";
 import { SignUp } from "./components/Signup.js";
+import { ReportItemModal } from "./components/ReportIteModal.js";
 
 function App() {
   const router = createBrowserRouter(routes);
@@ -14,6 +15,7 @@ function App() {
     <>
       <NavigationBar />
       <SignUp />
+      <ReportItemModal />
       <RouterProvider router={router} />
       <Footer />
     </>
