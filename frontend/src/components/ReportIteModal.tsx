@@ -274,8 +274,12 @@ export const ReportItemModal = () => {
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-slate-400">
                 <MapPin className="w-4 h-4" />
               </div>
-              <span className="max-w-[400px] h-fit pl-11 pr-4 py-3 rounded-xl bg-[#f3f5fa] border border-transparent focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-slate-800 placeholder:text-slate-400 outline-none truncate">
-                {address === "" ? "Select the location" : address}
+              <span className="max-w-full h-fit pl-11 pr-4 py-3 rounded-xl bg-[#f3f5fa] border border-transparent focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-slate-800 placeholder:text-slate-400 outline-none truncate">
+                {address === ""
+                  ? "Select the location"
+                  : address.length > 70
+                    ? address.slice(0, 70) + "..."
+                    : address}
               </span>
             </div>
           </div>
