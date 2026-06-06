@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   MapContainer,
@@ -7,13 +7,16 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
-import { X, Navigation, MapPin, MapPinHouse } from "lucide-react";
+import { X, Navigation, MapPin, MapPinHouse, MapPinSearch } from "lucide-react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
 // Fix for default Leaflet marker icons
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import { useMapModal } from "@/store/ui/modals";
+import axios from "axios";
+import { toast } from "sonner";
 let DefaultIcon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
@@ -60,30 +63,60 @@ const LocateButton = () => {
       title="Find my current location"
       className="absolute bottom-6 right-6 z-[1000] p-3 bg-white text-slate-700 hover:text-blue-600 rounded-full shadow-md border border-slate-200/80 transition-all active:scale-95 group bg-gradient-to-b from-white to-slate-50"
     >
-      <MapPinHouse className="w-5 h-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      <MapPinSearch className="w-5 h-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
     </button>
   );
 };
 
-export const Map = ({ isOpen, onClose, onConfirm }) => {
-  //   if (!isOpen) return null;
-
+export const Map = () => {
+  const isMapOpen = useMapModal((state) => state.isMapOpen);
+  const closeMap = useMapModal((state) => state.closeMap);
+  const setAddress = useMapModal((state) => state.setAddress);
+  const getAddress = useMapModal((state) => state.getAddress);
   const [position, setPosition] = useState(null);
-  const defaultCenter = [28, 84]; // Defaulted cleanly to Pokhara coordinates
 
   const handleConfirmSelection = () => {
-    if (position && onConfirm) {
-      onConfirm({ lat: position.lat, lng: position.lng });
-    }
-    onClose();
+    closeMap();
   };
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        const response = await axios.get(
+          `https://nominatim.openstreetmap.org/reverse`,
+          {
+            params: {
+              format: "json",
+              lat: position?.lat,
+              lon: position?.lng,
+              layer: "address",
+            },
+            headers: {
+              "User-Agent": "Bhetiyo/1.0",
+            },
+          },
+        );
+
+        setAddress(response.data.display_name);
+        toast.success("Location Updated");
+      } catch (error) {
+        toast.error("Error fetching the address");
+      }
+    };
+
+    if (position?.lat && position?.lng) {
+      fetchAddress();
+    }
+  }, [position]);
+
+  if (!isMapOpen) return;
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop Dimmer overlay layer */}
       <div
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
-        onClick={onClose}
+        onClick={closeMap}
       />
 
       {/* Main Structural Map Panel Card */}
@@ -95,12 +128,12 @@ export const Map = ({ isOpen, onClose, onConfirm }) => {
               <MapPin className="w-4 h-4" />
             </div>
             <h2 className="font-semibold text-slate-800 text-base">
-              Pin Item Location
+              {getAddress()}
             </h2>
           </div>
 
           <button
-            onClick={onClose}
+            onClick={closeMap}
             className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -110,10 +143,11 @@ export const Map = ({ isOpen, onClose, onConfirm }) => {
         {/* The Viewport Map Layer Canvas Container */}
         <div className="flex-grow relative z-0 bg-slate-50">
           <MapContainer
-            center={defaultCenter}
+            center={[28, 84]}
             zoom={7}
             className="h-full w-full z-0"
             zoomControl={false} // Removed default top-left controls to keep UI clean
+            attributionControl={false}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <LocateButton />
@@ -141,7 +175,7 @@ export const Map = ({ isOpen, onClose, onConfirm }) => {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={onClose}
+              onClick={closeMap}
               className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded-xl transition-colors"
             >
               Cancel
@@ -149,7 +183,7 @@ export const Map = ({ isOpen, onClose, onConfirm }) => {
             <button
               type="button"
               disabled={!position}
-              onClick={handleConfirmSelection}
+              onClick={() => handleConfirmSelection()}
               className={`px-5 py-2.5 rounded-xl font-medium text-sm text-white shadow-sm transition-all active:scale-[0.98] ${
                 position
                   ? "bg-blue-600 hover:bg-blue-700 cursor-pointer"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Upload,
   MapPin,
@@ -6,9 +6,10 @@ import {
   ShieldAlert,
   ChevronDown,
   X,
+  CalendarPlus,
 } from "lucide-react";
 import { createPortal } from "react-dom";
-import { useReportItemModal } from "@/store/ui/modals";
+import { useMapModal, useReportItemModal } from "@/store/ui/modals";
 
 export const ReportItemModal = () => {
   const isReportingItem = useReportItemModal((state) => state.isReportingItem);
@@ -20,6 +21,13 @@ export const ReportItemModal = () => {
     (state) => state.closeReportItemModel,
   );
   const setAction = useReportItemModal((state) => state.setAction);
+  const openMap = useMapModal((state) => state.openMap);
+  const isMapOpen = useMapModal((state) => state.isMapOpen);
+  const getAddress = useMapModal((state) => state.getAddress);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [address, setAddress] = useState("");
+  const [images, setImages] = useState<File[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     category: "Electronics",
@@ -27,22 +35,62 @@ export const ReportItemModal = () => {
     location: "",
     description: "",
   });
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
-  if (!isReportingItem || !action) return;
-
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitting Found Item Data:", formData);
+  // Handle image selection via file browser or drag-and-drop
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      setImages((prevImages) => {
+        const combined = [...prevImages, ...selectedFiles];
+        // Enforce max capacity of 3 images
+        return combined.slice(0, 3);
+      });
+    }
   };
+
+  const removeImage = (indexToRemove: number, e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop click event from bubbling up to the upload container trigger
+    setImages((prevImages) =>
+      prevImages.filter((_, idx) => idx !== indexToRemove),
+    );
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Reset file input target value
+    }
+  };
+
+  const triggerFileInput = () => {
+    if (images.length < 3) {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Appending selected files into the payload submission scheme
+    console.log("Submitting Found Item Data:", { ...formData, images });
+  };
+
+  useEffect(() => {
+    const temp = getAddress();
+    setAddress(temp);
+  }, [isMapOpen]);
+
+  if (!isReportingItem || !action) return null;
 
   const handleClose = () => {
     closeReportItemModel();
     setAction("");
+    setImages([]); // Clear state images on close
   };
 
   return createPortal(
@@ -75,24 +123,62 @@ export const ReportItemModal = () => {
             </p>
           </div>
 
-          {/* Drag & Drop Area */}
-          <div className="flex-1 min-h-[260px] border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-slate-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors group">
+          {/* Drag & Drop Area / Click Wrapper */}
+          <div
+            onClick={triggerFileInput}
+            className={`flex-1 min-h-[260px] border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center text-center transition-colors group ${
+              images.length >= 3
+                ? "border-slate-200 bg-slate-50/30 cursor-not-allowed"
+                : "border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer"
+            }`}
+          >
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              multiple
+              className="hidden"
+              disabled={images.length >= 3}
+            />
+
             <div className="p-4 bg-white rounded-full shadow-sm text-slate-400 group-hover:text-blue-600 transition-colors">
               <Upload className="w-6 h-6" />
             </div>
             <p className="mt-4 text-sm font-medium text-slate-700">
-              UPLOAD PHOTOS
+              {images.length >= 3 ? "MAX IMAGES REACHED" : "UPLOAD PHOTOS"}
             </p>
             <p className="text-xs text-slate-400 mt-1">
-              Drag and drop or click to browse
+              {images.length >= 3
+                ? "Remove an image to upload a different one"
+                : "Up to 3 images • Click to browse"}
             </p>
 
-            {/* Dummy preview thumbnails row */}
-            <div className="flex gap-2 mt-6 w-full justify-center">
-              <div className="w-16 h-12 bg-slate-200/60 rounded-md"></div>
-              <div className="w-16 h-12 bg-slate-200/60 rounded-md"></div>
-              <div className="w-16 h-12 bg-slate-200/60 rounded-md"></div>
-            </div>
+            {/* Dynamic Previews Row Grid */}
+            {images.length > 0 && (
+              <div className="flex gap-3 mt-6 w-full justify-center flex-wrap">
+                {images.map((file, idx) => (
+                  <div
+                    key={idx}
+                    className="relative w-20 h-16 bg-slate-100 rounded-lg border border-slate-200 overflow-visible group/thumb shadow-sm"
+                  >
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${idx + 1}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={(e) => removeImage(idx, e)}
+                      className="absolute -top-1.5 -right-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full p-0.5 shadow transition-transform scale-90 hover:scale-100 z-30"
+                      title="Remove image"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Community Safety Notice Banner */}
@@ -159,33 +245,38 @@ export const ReportItemModal = () => {
               <label className="text-xs font-semibold text-slate-600">
                 When was it encountered?
               </label>
-              <input
-                type="date"
-                name="dateFound"
-                value={formData.dateFound}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl bg-[#f3f5fa] border border-transparent focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-slate-800 outline-none"
-              />
+              <div
+                className="relative  cursor-pointer"
+                onClick={() => dateInputRef.current?.showPicker()} // Triggers the calendar dropdown programmatically
+              >
+                {/* <CalendarPlus
+                  size={20}
+                  className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-slate-400 z-10"
+                /> */}
+                <input
+                  type="date"
+                  name="dateFound"
+                  ref={dateInputRef}
+                  value={formData.dateFound}
+                  onChange={handleChange}
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#f3f5fa] border border-transparent focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-slate-800 outline-none dynamic-date-input"
+                />
+              </div>
             </div>
           </div>
 
           {/* Input: Location */}
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2.5 w-full">
             <label className="text-xs font-semibold text-slate-600">
               Where was it encountered?
             </label>
-            <div className="relative">
+            <div className="relative" onClick={() => openMap()}>
               <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-slate-400">
                 <MapPin className="w-4 h-4" />
               </div>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                placeholder="General area, park, or street name"
-                className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#f3f5fa] border border-transparent focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-slate-800 placeholder:text-slate-400 outline-none"
-              />
+              <span className="max-w-[400px] h-fit pl-11 pr-4 py-3 rounded-xl bg-[#f3f5fa] border border-transparent focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm text-slate-800 placeholder:text-slate-400 outline-none truncate">
+                {address === "" ? "Select the location" : address}
+              </span>
             </div>
           </div>
 
