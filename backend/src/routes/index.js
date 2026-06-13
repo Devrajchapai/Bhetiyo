@@ -6,6 +6,10 @@ export const configureRoutes = (app) => {
     res.json({ status: "ok", server: "bhetiyo-api" });
   });
 
+  app.get("/", (req, res) => {
+    res.send("Backend running ");
+  });
+
   //API routes
   app.use("/auth", auth);
 

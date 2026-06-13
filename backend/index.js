@@ -26,6 +26,8 @@ DatabaseConnection();
 
 //Start Server
 const backendurl = process.env.BACKEND_URL;
+const port = process.env.PORT;
+const host = process.env.HOST;
 
 server.listen(port, host, () => {
   console.log(`🚀 Bhetiyo API server running at ${backendurl}`);
