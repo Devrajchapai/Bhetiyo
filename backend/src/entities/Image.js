@@ -1,4 +1,4 @@
-import { EntitySchema } from "typeorm";
+import { EntitySchema, JoinColumn } from "typeorm";
 
 const Image = new EntitySchema({
   name: "Image",
@@ -33,11 +33,14 @@ const Image = new EntitySchema({
       length: 255,
       nullable: false,
     },
+  },
 
-    userId: {
-      type: "int",
-      nullable: true,
-      default: null,
+  relations: {
+    user: {
+      type: "many-to-one",
+      target: "User",
+      JoinColumn: { name: "user_id" },
+      onDelete: "CASCADE",
     },
   },
 });
