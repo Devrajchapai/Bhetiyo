@@ -1,5 +1,6 @@
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
+import ImageEmbedding from "../utils/ImageEmbedding.js";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINAEY_NAME,
@@ -30,8 +31,14 @@ export const uploadToCloudinary = (req, res, next) => {
 
     try {
       const uploadPromises = req.files.map((file, index) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
           const fileBase64 = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+
+          // Geting Image vector value
+          const ImageVectorValue = await ImageEmbedding(
+            file.buffer,
+            file.mimetype,
+          );
 
           cloudinary.uploader.upload(
             fileBase64,
@@ -41,15 +48,18 @@ export const uploadToCloudinary = (req, res, next) => {
             },
             (uploadErr, result) => {
               if (uploadErr) return reject(uploadErr);
-              resolve(result.secure_url);
+              resolve({
+                url: result.secure_url,
+                vector: ImageVectorValue,
+              });
             },
           );
         });
       });
-      const uploadedUrls = await Promise.all(uploadPromises);
+      const uploadedData = await Promise.all(uploadPromises);
 
       // Attach the resulting secure URLs to the request object for the next controller
-      req.uploadedImages = uploadedUrls;
+      req.uploadedData = uploadedData;
 
       next();
     } catch (cloudError) {

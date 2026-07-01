@@ -1,4 +1,4 @@
-import { EntitySchema, JoinColumn } from "typeorm";
+import { EntitySchema } from "typeorm";
 
 const Image = new EntitySchema({
   name: "Image",
@@ -29,8 +29,7 @@ const Image = new EntitySchema({
     },
 
     vector_value: {
-      type: "varbinary",
-      length: 6144,
+      type: "mediumblob",
       nullable: false,
     },
 
