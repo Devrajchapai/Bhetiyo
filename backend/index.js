@@ -25,7 +25,7 @@ const io = configureSocketIO(server);
 DatabaseConnection();
 
 //Start Server
-const backendurl = process.env.BACKEND_URL;
+const backendurl = process.env.BACKEND_URL || "Set up backend url in env";
 const port = process.env.PORT;
 const host = process.env.HOST;
 
