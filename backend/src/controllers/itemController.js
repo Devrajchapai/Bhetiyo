@@ -5,19 +5,13 @@ export const storeItem = async (req, res) => {
   try {
     const imageRepo = BhetiyoDataSource.getRepository("Image");
     const itemRepo = BhetiyoDataSource.getRepository("Item");
-    const { title, category, dateFound, description, location, source, username } = req.body;
+    const { title, category, dateFound, description, location, source } = req.body;
     const imageLink = req.uploadedData;
     const groupId = crypto.randomUUID();
 
-    let user = null;
-    if (username) {
-      const userRepo = BhetiyoDataSource.getRepository("User");
-      user = await userRepo.findOne({ where: { name: username } });
-    }
-
     await itemRepo.save({
       group_id: groupId,
-      user_id: user?.id ?? null,
+      user_id: req.user.id,
       title,
       category,
       dateFound,

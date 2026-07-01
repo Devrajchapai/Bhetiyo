@@ -2,6 +2,7 @@ import express from "express";
 import passport from "passport";
 import {
   handleOauthCallBack,
+  refreshToken,
   verifyToken,
 } from "../controllers/authController.js";
 
@@ -21,6 +22,7 @@ router.get(
   handleOauthCallBack,
 );
 
+router.post("/refresh", refreshToken);
 router.get("/verify", verifyToken);
 
 export default router;

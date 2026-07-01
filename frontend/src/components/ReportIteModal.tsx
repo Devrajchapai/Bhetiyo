@@ -10,8 +10,9 @@ import {
 } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useMapModal, useReportItemModal } from "@/store/ui/modals";
-import api from "@/api/client";
+import { useNavigationBar } from "@/store/ui/navigationbar";
 import { useAuth } from "@/store/data/auth";
+import api from "@/api/client";
 import { toast } from "sonner";
 
 export const ReportItemModal = () => {
@@ -40,7 +41,8 @@ export const ReportItemModal = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const dateInputRef = useRef<HTMLInputElement>(null);
-  const username = useAuth((state) => state.name);
+  const isConnected = useAuth((state) => state.isConnected);
+  const signingUp = useNavigationBar((state) => state.signingUp);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -81,6 +83,11 @@ export const ReportItemModal = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isConnected) {
+      toast.error("Must be logged in to report");
+      signingUp();
+      return;
+    }
     if (images.length === 0) return;
     setSubmitting(true);
 
@@ -92,7 +99,6 @@ export const ReportItemModal = () => {
       fd.append("description", formData.description);
       fd.append("location", address);
       fd.append("source", action);
-      if (username) fd.append("username", username);
       images.forEach((file) => fd.append("image", file));
 
       await api.post("/item/upload", fd, {

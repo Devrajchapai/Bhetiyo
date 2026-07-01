@@ -8,27 +8,35 @@ function AuthCallBack() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  //variables
-  const getToken = useAuth((state) => state.token);
-  const getEmail = useAuth((state) => state.email);
-  const getName = useAuth((state) => state.name);
-
   // actions
   const setToken = useAuth((state) => state.setToken);
-  const setEmai = useAuth((state) => state.setEmail);
+  const setEmail = useAuth((state) => state.setEmail);
   const setName = useAuth((state) => state.setName);
+  const setRefreshToken = useAuth((state) => state.setRefreshToken);
   const connect = useAuth((state) => state.connect);
 
   const tokenParam = searchParams.get("token");
+  const refreshTokenParam = searchParams.get("refreshToken");
   const userParam = searchParams.get("userJson");
 
   useEffect(() => {
-    setToken(tokenParam);
-    setEmai(userParam.email);
-    setName(userParam.name);
-    connect();
+    if (!tokenParam || !userParam) {
+      navigate("/");
+      return;
+    }
+
+    try {
+      const user = JSON.parse(decodeURIComponent(userParam));
+      setToken(tokenParam);
+      setRefreshToken(refreshTokenParam || "");
+      setEmail(user.email);
+      setName(user.name);
+      connect();
+    } catch {
+      // fallback: navigate home if parsing fails
+    }
     navigate("/");
-  }, [setToken, userParam]);
+  }, [setToken, setEmail, setName, setRefreshToken, connect, navigate, tokenParam, refreshTokenParam, userParam]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-sky-50">

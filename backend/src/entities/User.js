@@ -39,6 +39,12 @@ const User = new EntitySchema({
       nullable: true,
     },
 
+    refreshToken: {
+      type: "varchar",
+      length: 500,
+      nullable: true,
+    },
+
     created_at: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",
