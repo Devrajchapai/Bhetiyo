@@ -1,4 +1,5 @@
 import auth from "./auth.js";
+import item from "./item.js";
 
 export const configureRoutes = (app) => {
   //Health check endpoint
@@ -12,9 +13,10 @@ export const configureRoutes = (app) => {
 
   //API routes
   app.use("/auth", auth);
+  app.use("/item", item);
 
-  //Connection stats endpoint
-  app.get("/stats", (req, res) => {
+  //Connection status endpoint
+  app.get("/status", (req, res) => {
     res.json({
       status: "ok",
       server: "bhetiyo-api",
