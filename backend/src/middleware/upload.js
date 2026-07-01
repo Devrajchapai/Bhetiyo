@@ -29,13 +29,16 @@ export const uploadToCloudinary = (req, res, next) => {
     }
 
     try {
-      const uploadPromises = req.files.map((file) => {
+      const uploadPromises = req.files.map((file, index) => {
         return new Promise((resolve, reject) => {
           const fileBase64 = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
 
           cloudinary.uploader.upload(
             fileBase64,
-            { folder: `Bhetiyo/${req.body.username}` },
+            {
+              folder: `Bhetiyo/${req.body.username}`,
+              public_id: `${req.body.title}_${index + 1}`,
+            },
             (uploadErr, result) => {
               if (uploadErr) return reject(uploadErr);
               resolve(result.secure_url);

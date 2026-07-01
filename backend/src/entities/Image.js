@@ -16,6 +16,12 @@ const Image = new EntitySchema({
       nullable: false,
     },
 
+    name: {
+      type: "varchar",
+      length: 50,
+      nullable: false,
+    },
+
     url: {
       type: "varchar",
       length: 255,
