@@ -43,7 +43,7 @@ export const uploadToCloudinary = (req, res, next) => {
           cloudinary.uploader.upload(
             fileBase64,
             {
-              folder: `Bhetiyo/${req.body.username}`,
+              folder: `Bhetiyo/${req.body.username || "NO_USER"}`,
               public_id: `${req.body.title}_${index + 1}`,
             },
             (uploadErr, result) => {

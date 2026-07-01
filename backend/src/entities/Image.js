@@ -11,17 +11,6 @@ const Image = new EntitySchema({
       generated: "increment",
     },
 
-    user_id: {
-      type: "int",
-      nullable: false,
-    },
-
-    name: {
-      type: "varchar",
-      length: 50,
-      nullable: false,
-    },
-
     url: {
       type: "varchar",
       length: 255,
@@ -33,21 +22,13 @@ const Image = new EntitySchema({
       nullable: false,
     },
 
-    source: {
-      type: "varchar",
-      length: 255,
+    group_id: {
+      type: "uuid",
       nullable: false,
     },
   },
 
-  relations: {
-    user: {
-      type: "many-to-one",
-      target: "User",
-      JoinColumn: { name: "user_id" },
-      onDelete: "CASCADE",
-    },
-  },
+  relations: {},
 });
 
 export default Image;

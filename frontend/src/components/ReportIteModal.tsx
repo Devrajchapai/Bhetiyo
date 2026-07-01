@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import { createPortal } from "react-dom";
 import { useMapModal, useReportItemModal } from "@/store/ui/modals";
+import api from "@/api/client";
+import { useAuth } from "@/store/data/auth";
+import { toast } from "sonner";
 
 export const ReportItemModal = () => {
   const isReportingItem = useReportItemModal((state) => state.isReportingItem);
@@ -35,7 +38,9 @@ export const ReportItemModal = () => {
     location: "",
     description: "",
   });
+  const [submitting, setSubmitting] = useState(false);
   const dateInputRef = useRef<HTMLInputElement>(null);
+  const username = useAuth((state) => state.name);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -74,10 +79,33 @@ export const ReportItemModal = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Appending selected files into the payload submission scheme
-    console.log("Submitting Found Item Data:", { ...formData, images });
+    if (images.length === 0) return;
+    setSubmitting(true);
+
+    try {
+      const fd = new FormData();
+      fd.append("title", formData.title);
+      fd.append("category", formData.category);
+      fd.append("dateFound", formData.dateFound);
+      fd.append("description", formData.description);
+      fd.append("location", address);
+      fd.append("source", action);
+      if (username) fd.append("username", username);
+      images.forEach((file) => fd.append("image", file));
+
+      await api.post("/item/upload", fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      toast.success("Item reported successfully");
+      handleClose();
+    } catch (error) {
+      toast.error("Failed to report item. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -311,10 +339,13 @@ export const ReportItemModal = () => {
 
             <button
               type="submit"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#3b82f6] hover:bg-blue-600 text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
+              disabled={submitting || images.length === 0}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#3b82f6] hover:bg-blue-600 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md active:scale-[0.98]"
             >
               <Send className="w-4 h-4" />
-              <span className="capitalize">{action} Item</span>
+              <span className="capitalize">
+                {submitting ? "Uploading..." : `${action} Item`}
+              </span>
             </button>
           </div>
         </form>
