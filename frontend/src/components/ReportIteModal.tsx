@@ -28,6 +28,8 @@ export const ReportItemModal = () => {
   const openMap = useMapModal((state) => state.openMap);
   const isMapOpen = useMapModal((state) => state.isMapOpen);
   const getAddress = useMapModal((state) => state.getAddress);
+  const mapLatitude = useMapModal((state) => state.latitude);
+  const mapLongitude = useMapModal((state) => state.longitude);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [address, setAddress] = useState("");
@@ -98,6 +100,8 @@ export const ReportItemModal = () => {
       fd.append("dateFound", formData.dateFound);
       fd.append("description", formData.description);
       fd.append("location", address);
+      if (mapLatitude !== null) fd.append("latitude", String(mapLatitude));
+      if (mapLongitude !== null) fd.append("longitude", String(mapLongitude));
       fd.append("source", action);
       images.forEach((file) => fd.append("image", file));
 

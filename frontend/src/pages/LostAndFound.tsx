@@ -17,6 +17,8 @@ const mapItemToCard = (item) => ({
   category: item.category,
   title: item.title,
   location: item.location,
+  latitude: item.latitude,
+  longitude: item.longitude,
   image: item.image,
   slug: item.slug,
   buttonText: item.source.toLowerCase() === "found" ? "That's mine!" : "Found this?",

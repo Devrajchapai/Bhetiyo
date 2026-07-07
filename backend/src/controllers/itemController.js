@@ -31,6 +31,8 @@ export const getItems = async (req, res) => {
         "item.category",
         "item.description",
         "item.location",
+        "item.latitude",
+        "item.longitude",
         "item.source",
         "item.slug",
         "item.created_at",
@@ -139,7 +141,7 @@ export const storeItem = async (req, res) => {
   try {
     const imageRepo = BhetiyoDataSource.getRepository("Image");
     const itemRepo = BhetiyoDataSource.getRepository("Item");
-    const { title, category, dateFound, description, location, source } = req.body;
+    const { title, category, dateFound, description, location, source, latitude, longitude } = req.body;
     const imageLink = req.uploadedData;
     const groupId = crypto.randomUUID();
 
@@ -153,6 +155,8 @@ export const storeItem = async (req, res) => {
       dateFound,
       description,
       location,
+      latitude: latitude ? parseFloat(latitude) : null,
+      longitude: longitude ? parseFloat(longitude) : null,
       source,
       slug,
     });

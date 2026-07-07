@@ -75,7 +75,12 @@ export const Map = () => {
   const getAddress = useMapModal((state) => state.getAddress);
   const [position, setPosition] = useState(null);
 
+  const setCoordinates = useMapModal((state) => state.setCoordinates);
+
   const handleConfirmSelection = () => {
+    if (position) {
+      setCoordinates(position.lat, position.lng);
+    }
     closeMap();
   };
 

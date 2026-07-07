@@ -50,6 +50,20 @@ const Item = new EntitySchema({
       nullable: true,
     },
 
+    latitude: {
+      type: "decimal",
+      precision: 10,
+      scale: 7,
+      nullable: true,
+    },
+
+    longitude: {
+      type: "decimal",
+      precision: 10,
+      scale: 7,
+      nullable: true,
+    },
+
     source: {
       type: "varchar",
       length: 20,

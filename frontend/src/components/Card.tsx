@@ -34,10 +34,20 @@ export const Card = ({ item }) => {
           {item.title}
         </h3>
 
-        <div className="flex items-center gap-1.5 text-slate-400 text-sm">
+        <a
+          href={
+            item.latitude && item.longitude
+              ? `https://www.google.com/maps?q=${item.latitude},${item.longitude}`
+              : `https://www.google.com/maps/search/${encodeURIComponent(item.location || "")}`
+          }
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
+          className="flex items-center gap-1.5 text-slate-400 text-sm hover:text-blue-600 transition-colors"
+        >
           <MapPin size={14} className="flex-shrink-0" />
           <span className="truncate">{item.location}</span>
-        </div>
+        </a>
 
         <Button
           variant="outline"

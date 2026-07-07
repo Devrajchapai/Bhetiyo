@@ -163,10 +163,19 @@ export const ItemDetail = () => {
 
             <div className="space-y-3 pt-2">
               {item.location && (
-                <div className="flex items-center gap-3 text-slate-500 text-sm">
+                <a
+                  href={
+                    item.latitude && item.longitude
+                      ? `https://www.google.com/maps?q=${item.latitude},${item.longitude}`
+                      : `https://www.google.com/maps/search/${encodeURIComponent(item.location)}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-slate-500 text-sm hover:text-blue-600 transition-colors"
+                >
                   <MapPin className="w-5 h-5 text-slate-400 flex-shrink-0" />
                   <span>{item.location}</span>
-                </div>
+                </a>
               )}
 
               {item.dateFound && (
