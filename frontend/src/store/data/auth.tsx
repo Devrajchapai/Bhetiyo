@@ -8,11 +8,13 @@ interface AuthType {
   refreshToken: string | null;
   email: string | null;
   name: string | null;
+  id: number | null;
 
   setToken: (value: string) => void;
   setRefreshToken: (value: string) => void;
   setEmail: (value: string) => void;
   setName: (value: string) => void;
+  setId: (value: number) => void;
   connect: () => void;
   disconnect: () => void;
 }
@@ -24,12 +26,14 @@ export const useAuth = create<AuthType>()(
       refreshToken: "",
       email: "",
       name: "",
+      id: null,
       isConnected: false,
 
       setToken: (value) => set({ token: value }),
       setRefreshToken: (value) => set({ refreshToken: value }),
       setEmail: (value) => set({ email: value }),
       setName: (value) => set({ name: value }),
+      setId: (value) => set({ id: value }),
       connect: () => set({ isConnected: true }),
       disconnect: () => set({ isConnected: false }),
     }),
@@ -40,6 +44,7 @@ export const useAuth = create<AuthType>()(
         refreshToken: state.refreshToken,
         email: state.email,
         name: state.name,
+        id: state.id,
         isConnected: state.isConnected,
       }),
     },

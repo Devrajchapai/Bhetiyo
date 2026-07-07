@@ -1,5 +1,6 @@
 import auth from "./auth.js";
 import item from "./item.js";
+import chat from "./chat.js";
 
 export const configureRoutes = (app) => {
   //Health check endpoint
@@ -14,6 +15,7 @@ export const configureRoutes = (app) => {
   //API routes
   app.use("/auth", auth);
   app.use("/item", item);
+  app.use("/chat", chat);
 
   //Connection status endpoint
   app.get("/status", (req, res) => {

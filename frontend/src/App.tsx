@@ -6,6 +6,7 @@ import { Footer } from "./components/Footer.js";
 import { SignUp } from "./components/Signup.js";
 import { ReportItemModal } from "./components/ReportIteModal.js";
 import { Map } from "./components/Map.js";
+import { ChatPanel } from "./components/ChatPanel.js";
 
 function App() {
   const router = createBrowserRouter(routes);
@@ -19,6 +20,7 @@ function App() {
       <ReportItemModal />
       <Map />
       <RouterProvider router={router} />
+      <ChatPanel />
       <Footer />
     </>
   );

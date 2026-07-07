@@ -19,7 +19,8 @@ configureMiddleware(app);
 configureRoutes(app);
 
 //Configure Socket.IO
-const io = configureSocketIO(server);
+const { io } = configureSocketIO(server);
+app.set("io", io); // Make io accessible in controllers
 
 // Connect with Database
 DatabaseConnection();

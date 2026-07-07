@@ -13,6 +13,7 @@ function AuthCallBack() {
   const setEmail = useAuth((state) => state.setEmail);
   const setName = useAuth((state) => state.setName);
   const setRefreshToken = useAuth((state) => state.setRefreshToken);
+  const setId = useAuth((state) => state.setId);
   const connect = useAuth((state) => state.connect);
 
   const tokenParam = searchParams.get("token");
@@ -31,6 +32,7 @@ function AuthCallBack() {
       setRefreshToken(refreshTokenParam || "");
       setEmail(user.email);
       setName(user.name);
+      setId(user.id);
       connect();
     } catch {
       // fallback: navigate home if parsing fails

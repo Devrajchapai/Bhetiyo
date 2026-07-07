@@ -1,16 +1,25 @@
 import { api } from "@/api";
+import { useAuth } from "@/store/data/auth";
+import { useChat } from "@/store/data/chat";
 import { useNavigationBar } from "@/store/ui/navigationbar";
-import { AlertTriangle, ArrowLeft, Calendar, ChevronLeft, ChevronRight, Loader2, MapPin, User } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Calendar, ChevronLeft, ChevronRight, Loader2, MapPin, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 export const ItemDetail = () => {
   const { slug } = useParams();
   const changeTab = useNavigationBar((state) => state.changeTab);
+  const isConnected = useAuth((state) => state.isConnected);
+  const claimItem = useChat((state) => state.claimItem);
+  const openChat = useChat((state) => state.openChat);
+  const setActiveConversation = useChat((state) => state.setActiveConversation);
+  const signingUp = useNavigationBar((state) => state.signingUp);
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
+  const [claiming, setClaiming] = useState(false);
 
   useEffect(() => {
     changeTab("item");
@@ -32,6 +41,41 @@ export const ItemDetail = () => {
         setLoading(false);
       });
   }, [slug]);
+
+  const handleClaim = async () => {
+    if (!isConnected) {
+      signingUp();
+      return;
+    }
+
+    if (!item) return;
+    setClaiming(true);
+
+    const type = item.source?.toLowerCase() === "found" ? "group" : "private";
+
+    try {
+      const conversation = await claimItem(item.group_id, type);
+      setActiveConversation(conversation.id);
+      openChat();
+      toast.success(
+        type === "private"
+          ? "Private conversation started with the poster"
+          : "You've joined the group conversation",
+      );
+    } catch (err: any) {
+      const msg = err?.response?.data?.error;
+      if (msg === "You have already claimed this item") {
+        toast.info("You've already claimed this item. Check your messages.");
+        openChat();
+      } else if (msg === "You cannot claim your own item") {
+        toast.error("You cannot claim your own item");
+      } else {
+        toast.error("Failed to claim item. Please try again.");
+      }
+    } finally {
+      setClaiming(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -194,7 +238,16 @@ export const ItemDetail = () => {
             </div>
 
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
-              <button className="flex-1 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98]">
+              <button
+                onClick={handleClaim}
+                disabled={claiming}
+                className="flex-1 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
+              >
+                {claiming ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <MessageCircle className="w-4 h-4" />
+                )}
                 {item.source?.toLowerCase() === "found"
                   ? "Claim This Item"
                   : "I Found This"}

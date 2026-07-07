@@ -1,8 +1,51 @@
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useAuth } from "@/store/data/auth";
+import { useChat } from "@/store/data/chat";
+import { useNavigationBar } from "@/store/ui/navigationbar";
+import { toast } from "sonner";
 
 export const Card = ({ item }) => {
+  const isConnected = useAuth((state) => state.isConnected);
+  const claimItem = useChat((state) => state.claimItem);
+  const openChat = useChat((state) => state.openChat);
+  const setActiveConversation = useChat((state) => state.setActiveConversation);
+  const signingUp = useNavigationBar((state) => state.signingUp);
+
+  const handleClaim = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isConnected) {
+      signingUp();
+      return;
+    }
+
+    const claimType = item.type?.toLowerCase() === "found" ? "group" : "private";
+
+    try {
+      const conversation = await claimItem(item.id, claimType);
+      setActiveConversation(conversation.id);
+      openChat();
+      toast.success(
+        claimType === "private"
+          ? "Private conversation started with the poster"
+          : "You've joined the group conversation",
+      );
+    } catch (err: any) {
+      const msg = err?.response?.data?.error;
+      if (msg === "You have already claimed this item") {
+        toast.info("You've already claimed this item. Check your messages.");
+        openChat();
+      } else if (msg === "You cannot claim your own item") {
+        toast.error("You cannot claim your own item");
+      } else {
+        toast.error("Failed to claim item. Please try again.");
+      }
+    }
+  };
+
   return (
     <Link
       to={`/items/${item.slug}`}
@@ -51,6 +94,7 @@ export const Card = ({ item }) => {
 
         <Button
           variant="outline"
+          onClick={handleClaim}
           className="w-full rounded-2xl border-blue-100 text-blue-600 font-bold hover:bg-blue-50 hover:text-blue-700 transition-colors py-5"
         >
           {item.buttonText}
