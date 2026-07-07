@@ -130,6 +130,7 @@ export const NavigationBar = () => {
               onClick={() => {
                 // ... change here
                 // ... navigate to user profile
+                window.alert("need to work on this");
                 console.log("user is connected");
               }}
               className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors duration-200"
