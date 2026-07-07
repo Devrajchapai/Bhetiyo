@@ -1,20 +1,20 @@
 import { MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 
 export const Card = ({ item }) => {
   return (
-    <div
+    <Link
+      to={`/items/${item.slug}`}
       key={item.id}
-      className="snap-start flex-shrink-0 w-[280px] md:w-[320px] group bg-white rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
+      className="snap-start flex-shrink-0 w-[280px] md:w-[320px] group bg-white rounded-[32px] border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden block"
     >
-      {/* Image Container */}
       <div className="relative h-48 overflow-hidden">
         <img
           src={item.image}
           alt={item.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        {/* Badge Overlay */}
         <div className="absolute top-4 left-4">
           <span
             className={`text-[10px] font-bold px-3 py-1 rounded-full text-white tracking-wider ${
@@ -26,7 +26,6 @@ export const Card = ({ item }) => {
         </div>
       </div>
 
-      {/* Content Area */}
       <div className="p-5 space-y-3">
         <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
           {item.category}
@@ -47,6 +46,6 @@ export const Card = ({ item }) => {
           {item.buttonText}
         </Button>
       </div>
-    </div>
+    </Link>
   );
 };

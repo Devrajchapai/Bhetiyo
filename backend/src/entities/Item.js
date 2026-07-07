@@ -56,6 +56,12 @@ const Item = new EntitySchema({
       nullable: false,
     },
 
+    slug: {
+      type: "varchar",
+      length: 255,
+      nullable: true,
+    },
+
     created_at: {
       type: "timestamp",
       createDate: true,

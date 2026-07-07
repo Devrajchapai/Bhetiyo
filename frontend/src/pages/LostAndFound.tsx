@@ -1,9 +1,26 @@
 import { Card } from "@/components/Card";
-import { Items } from "@/data/staticData";
+import { api } from "@/api";
 import { useReportItemModal } from "@/store/ui/modals";
 import { useNavigationBar } from "@/store/ui/navigationbar";
-import { AlertTriangle, ListFilter, PlusCircle, Search, X } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { AlertTriangle, ListFilter, Loader2, PlusCircle, Search, X } from "lucide-react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchItems = async () => {
+  const { data } = await api.get("/item/items");
+  return data.data;
+};
+
+const mapItemToCard = (item) => ({
+  id: item.group_id,
+  type: item.source.toUpperCase(),
+  category: item.category,
+  title: item.title,
+  location: item.location,
+  image: item.image,
+  slug: item.slug,
+  buttonText: item.source.toLowerCase() === "found" ? "That's mine!" : "Found this?",
+});
 
 export const LostAndFound = () => {
   const changeTab = useNavigationBar((state) => state.changeTab);
@@ -16,11 +33,39 @@ export const LostAndFound = () => {
   const [isSearching, setIsSearching] = useState(false);
   const inputRef = useRef(null);
 
+  const { data: items = [], isLoading, isError } = useQuery({
+    queryKey: ["items"],
+    queryFn: fetchItems,
+  });
+
   const tabs = [
     { id: "all", label: "All Items" },
     { id: "lost", label: "Only Lost" },
     { id: "found", label: "Only Found" },
   ];
+
+  const filteredItems = useMemo(() => {
+    let result = items;
+
+    if (activeTab !== "all" && activeTab !== "filter") {
+      result = result.filter(
+        (item) => item.source.toLowerCase() === activeTab.toLowerCase(),
+      );
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (item) =>
+          item.title.toLowerCase().includes(q) ||
+          item.category.toLowerCase().includes(q) ||
+          (item.description && item.description.toLowerCase().includes(q)) ||
+          (item.location && item.location.toLowerCase().includes(q)),
+      );
+    }
+
+    return result;
+  }, [items, activeTab, searchQuery]);
 
   const handleSearchClick = () => {
     setIsSearching(true);
@@ -142,13 +187,28 @@ export const LostAndFound = () => {
         )}
       </div>
 
-      {/* Parent wrapper to center the grid container horizontally on the page */}
       <div className="w-full flex justify-center">
-        <div className="w-[80%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-7 gap-y-10 px-5 py-5">
-          {Items.map((item) => (
-            <Card key={item.id} item={item} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          </div>
+        ) : isError ? (
+          <div className="flex flex-col items-center justify-center py-20 text-slate-500">
+            <AlertTriangle className="w-10 h-10 text-red-400 mb-3" />
+            <p className="text-sm">Failed to load items. Please try again later.</p>
+          </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+            <Search className="w-10 h-10 mb-3" />
+            <p className="text-sm">No items found.</p>
+          </div>
+        ) : (
+          <div className="w-[80%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-7 gap-y-10 px-5 py-5">
+            {filteredItems.map((item) => (
+              <Card key={item.group_id} item={mapItemToCard(item)} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
