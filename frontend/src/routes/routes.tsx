@@ -2,9 +2,8 @@ import AuthCallBack from "@/components/AuthCallBack.jsx";
 import { Home } from "@/pages/Home.tsx";
 import { ItemDetail } from "@/pages/ItemDetail";
 import { LostAndFound } from "@/pages/LostAndFound";
+import { Community } from "@/pages/Community";
 import { NotFound } from "@/pages/NotFound.tsx";
-import { useNavigationBar } from "@/store/ui/navigationbar";
-import { Loader } from "lucide-react";
 
 export const routes = [
   {
@@ -24,6 +23,11 @@ export const routes = [
   {
     path: "/items/:slug",
     element: <ItemDetail />,
+  },
+
+  {
+    path: "/community",
+    element: <Community />,
   },
 
   {
