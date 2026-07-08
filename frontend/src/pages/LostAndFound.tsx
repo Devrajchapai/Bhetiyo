@@ -2,7 +2,14 @@ import { Card } from "@/components/Card";
 import { api } from "@/api";
 import { useReportItemModal } from "@/store/ui/modals";
 import { useNavigationBar } from "@/store/ui/navigationbar";
-import { AlertTriangle, ListFilter, Loader2, PlusCircle, Search, X } from "lucide-react";
+import {
+  AlertTriangle,
+  ListFilter,
+  Loader2,
+  PlusCircle,
+  Search,
+  X,
+} from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -21,7 +28,8 @@ const mapItemToCard = (item) => ({
   longitude: item.longitude,
   image: item.image,
   slug: item.slug,
-  buttonText: item.source.toLowerCase() === "found" ? "That's mine!" : "Found this?",
+  buttonText:
+    item.source.toLowerCase() === "found" ? "That's mine!" : "Found this?",
 });
 
 export const LostAndFound = () => {
@@ -35,7 +43,11 @@ export const LostAndFound = () => {
   const [isSearching, setIsSearching] = useState(false);
   const inputRef = useRef(null);
 
-  const { data: items = [], isLoading, isError } = useQuery({
+  const {
+    data: items = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["items"],
     queryFn: fetchItems,
   });
@@ -172,7 +184,7 @@ export const LostAndFound = () => {
             })}
 
             {/* Advanced Filters Button */}
-            <button
+            {/* <button
               className={`p-2.5 rounded-full text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 transition-all duration-200 shrink-0 ${
                 activeTab === "filter"
                   ? "bg-white text-blue-700 shadow-sm"
@@ -184,7 +196,7 @@ export const LostAndFound = () => {
               }}
             >
               <ListFilter className="w-5 h-5" />
-            </button>
+            </button> */}
           </div>
         )}
       </div>
@@ -197,7 +209,9 @@ export const LostAndFound = () => {
         ) : isError ? (
           <div className="flex flex-col items-center justify-center py-20 text-slate-500">
             <AlertTriangle className="w-10 h-10 text-red-400 mb-3" />
-            <p className="text-sm">Failed to load items. Please try again later.</p>
+            <p className="text-sm">
+              Failed to load items. Please try again later.
+            </p>
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-slate-400">
