@@ -297,6 +297,8 @@ export const closeConversation = async (req, res) => {
     const userId = req.user.id;
     const conversationRepo = BhetiyoDataSource.getRepository("Conversation");
     const itemRepo = BhetiyoDataSource.getRepository("Item");
+    const participantRepo = BhetiyoDataSource.getRepository("ConversationParticipant");
+    const notificationRepo = BhetiyoDataSource.getRepository("Notification");
 
     const conversation = await conversationRepo.findOne({ where: { id } });
     if (!conversation) {
@@ -313,8 +315,42 @@ export const closeConversation = async (req, res) => {
       closed_at: new Date(),
     });
 
+    const participants = await participantRepo.find({
+      where: { conversation_id: id },
+    });
+
+    const io = req.app.get("io");
+
+    for (const participant of participants) {
+      if (participant.user_id === userId) continue;
+
+      const notif = await notificationRepo.save({
+        type: "conversation_closed",
+        similarity_score: null,
+        source_item_group_id: conversation.item_group_id,
+        matched_item_group_id: conversation.item_group_id,
+        user_id: participant.user_id,
+        title: "Conversation closed",
+        message: `The conversation about "${item.title}" has been closed by the uploader.`,
+        is_read: false,
+      });
+
+      if (io) {
+        io.to(`user:${participant.user_id}`).emit("notification:new", {
+          id: notif.id,
+          type: notif.type,
+          title: notif.title,
+          message: notif.message,
+          matched_item_group_id: conversation.item_group_id,
+          similarity_score: null,
+          created_at: notif.created_at instanceof Date
+            ? notif.created_at.toISOString()
+            : new Date(notif.created_at).toISOString(),
+        });
+      }
+    }
+
     try {
-      const io = req.app.get("io");
       if (io) {
         io.to(`conversation:${id}`).emit("conversation:closed", {
           conversation_id: id,
