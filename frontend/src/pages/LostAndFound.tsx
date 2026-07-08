@@ -56,12 +56,15 @@ export const LostAndFound = () => {
     { id: "all", label: "All Items" },
     { id: "lost", label: "Only Lost" },
     { id: "found", label: "Only Found" },
+    { id: "resolved", label: "Resolved" },
   ];
 
   const filteredItems = useMemo(() => {
     let result = items;
 
-    if (activeTab !== "all" && activeTab !== "filter") {
+    if (activeTab === "resolved") {
+      result = result.filter((item) => item.resolved);
+    } else if (activeTab !== "all" && activeTab !== "filter") {
       result = result.filter(
         (item) => item.source.toLowerCase() === activeTab.toLowerCase(),
       );
