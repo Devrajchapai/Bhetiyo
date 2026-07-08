@@ -3,6 +3,7 @@ import { Home } from "@/pages/Home.tsx";
 import { ItemDetail } from "@/pages/ItemDetail";
 import { LostAndFound } from "@/pages/LostAndFound";
 import { Community } from "@/pages/Community";
+import { Profile } from "@/pages/Profile";
 import { NotFound } from "@/pages/NotFound.tsx";
 
 export const routes = [
@@ -28,6 +29,11 @@ export const routes = [
   {
     path: "/community",
     element: <Community />,
+  },
+
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 
   {

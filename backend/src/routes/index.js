@@ -3,6 +3,7 @@ import item from "./item.js";
 import chat from "./chat.js";
 import community from "./community.js";
 import home from "./home.js";
+import profile from "./profile.js";
 
 export const configureRoutes = (app) => {
   //Health check endpoint
@@ -20,6 +21,7 @@ export const configureRoutes = (app) => {
   app.use("/chat", chat);
   app.use("/community", community);
   app.use("/home", home);
+  app.use("/profile", profile);
 
   //Connection status endpoint
   app.get("/status", (req, res) => {

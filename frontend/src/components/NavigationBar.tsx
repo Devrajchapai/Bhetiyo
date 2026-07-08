@@ -9,8 +9,8 @@ type Tabs = "home" | "item" | "community";
 
 const NAV_ITEMS: { id: Tabs; label: string; navigateTo: string }[] = [
   { id: "home", label: "Home", navigateTo: "/" },
-  { id: "item", label: "Lost & Found", navigateTo: "items" },
-  { id: "community", label: "Community", navigateTo: "community" },
+  { id: "item", label: "Lost & Found", navigateTo: "/items" },
+  { id: "community", label: "Community", navigateTo: "/community" },
 ];
 
 export const NavigationBar = () => {
@@ -34,7 +34,7 @@ export const NavigationBar = () => {
           <button
             className="text-[22px] font-semibold text-blue-600 tracking-tight leading-none cursor-pointer"
             onClick={() => {
-              navigation.navigate("/");
+              window.location.href = "/";
             }}
           >
             Bhetiyo
@@ -53,7 +53,7 @@ export const NavigationBar = () => {
                 key={id}
                 onClick={() => {
                   changeTab(id);
-                  navigation.navigate(navigateTo);
+                  window.location.href = navigateTo;
                 }}
                 className={`relative px-4 py-1.5 text-[13.5px] font-medium rounded-full transition-all duration-200 cursor-pointer whitespace-nowrap
                   ${
@@ -128,10 +128,7 @@ export const NavigationBar = () => {
           ) : (
             <button
               onClick={() => {
-                // ... change here
-                // ... navigate to user profile
-                window.alert("need to work on this");
-                console.log("user is connected");
+                window.location.href = "/profile";
               }}
               className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors duration-200"
             >
