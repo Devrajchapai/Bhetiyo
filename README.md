@@ -1,123 +1,214 @@
+````markdown
 # 🔍 Bhetiyo — भेटियो
 
-> **"Bhetiyo"** means **"Found"** in Nepali. A community-driven lost and found platform to help reunite people with their lost belongings.
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Node.js](https://img.shields.io/badge/Node.js-Express-green?logo=node.js)
+![MySQL](https://img.shields.io/badge/MySQL-TypeORM-blue?logo=mysql)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+> **"Bhetiyo"** means **"Found"** in Nepali.  
+> A modern community-driven Lost & Found platform that helps reunite people with their lost belongings.
 
 ---
 
 ## 📖 About
 
-Bhetiyo is a full-stack web application where users can post lost or found items and connect with others in the community to recover them. Whether you've lost your wallet, a pet, or a cherished item — Bhetiyo makes it easy to report and search.
+**Bhetiyo** is a full-stack web application that provides a centralized platform for reporting, discovering, and recovering lost belongings.
+
+Instead of relying on scattered Facebook posts, messaging groups, or physical notice boards, Bhetiyo allows users to create detailed reports for lost and found items, browse community submissions, and securely communicate with one another in real time.
+
+The project was built to solve a real-world problem while showcasing modern full-stack development practices using React, Express, MySQL, TypeORM, and Socket.IO.
+
+---
+
+## 🌟 Why Bhetiyo?
+
+Every day, valuable belongings are lost because there is no centralized place where people can report and search for them.
+
+Bhetiyo aims to bridge this gap by providing a community-powered platform where people can easily report lost items, publish found items, search intelligently, and communicate securely.
+
+Whether it's a wallet, phone, laptop, pet, important document, or any cherished belonging—every successful recovery begins with someone reporting it.
 
 ---
 
 ## ✨ Features
 
-- 📋 **Post Lost Items** — Report something you've lost with details and location
-- 📦 **Post Found Items** — Let the community know about something you've found
-- 🔎 **Search & Browse** — Filter posts by category, location, or date
-- 🔐 **Google OAuth** — Sign in securely with your Google account
-- 💬 **Real-time Chat** — Socket.IO powered messaging between users
-- 👤 **User Profiles** — Manage your account and posted items
+### 📋 Lost Item Reporting
+
+Create detailed reports including:
+
+- Item title
+- Description
+- Category
+- Date & Time
+- Last known location
+- Images
+
+---
+
+### 📦 Found Item Reporting
+
+Help others by publishing items you've found with detailed information and photographs.
+
+---
+
+### 🔎 Smart Search & Filtering
+
+Quickly discover posts using filters such as:
+
+- Categories
+- Keywords
+- Locations
+- Lost / Found Status
+- Date
+
+---
+
+### 💬 Real-time Messaging
+
+Communicate instantly with other users through a built-in chat system powered by **Socket.IO** to coordinate item recovery.
+
+---
+
+### 🔐 Secure Authentication
+
+Sign in securely using your Google account with OAuth 2.0.
+
+---
+
+### 👤 User Dashboard
+
+Manage:
+
+- Your profile
+- Posted items
+- Conversations
+- Account information
+
+---
+
+### ⚡ Responsive Design
+
+Designed to work seamlessly across desktop, tablet, and mobile devices.
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 | Technology | Purpose |
-|---|---|
-| React 19 + TypeScript | UI framework |
-| Vite | Build tool & dev server |
+|------------|---------|
+| React 19 + TypeScript | UI Framework |
+| Vite | Build Tool |
 | Tailwind CSS v4 | Styling |
-| shadcn/ui + Radix UI | UI components |
-| React Router v7 | Client-side routing |
-| TanStack Query | Server state management |
-| Zustand | Client state management |
-| Axios | HTTP client |
+| shadcn/ui + Radix UI | UI Components |
+| React Router v7 | Client-side Routing |
+| TanStack Query | Server State Management |
+| Zustand | Client State Management |
+| Axios | HTTP Client |
 | Lucide React | Icons |
-| Sonner | Toast notifications |
+| Sonner | Toast Notifications |
+
+---
 
 ### Backend
+
 | Technology | Purpose |
-|---|---|
-| Node.js + Express 5 | Web server |
-| JavaScript (ESM) | Runtime language |
-| MySQL + TypeORM | Database & ORM |
+|------------|---------|
+| Node.js + Express 5 | Web Server |
+| JavaScript (ESM) | Runtime |
+| MySQL | Database |
+| TypeORM | ORM |
 | Passport.js | Authentication |
-| Google OAuth 2.0 | Social login |
-| Socket.IO | Real-time communication |
-| dotenv | Environment config |
+| Google OAuth 2.0 | Social Login |
+| Socket.IO | Real-time Communication |
+| dotenv | Environment Configuration |
+
+---
+
+## 🏗️ System Architecture
+
+```text
+                    React + Vite
+                          │
+                 React Router + Zustand
+                          │
+                  TanStack Query
+                          │
+                     Axios REST API
+                          │
+                 Express.js Backend
+        ┌──────────────┼──────────────┐
+        │              │              │
+ Authentication   Socket.IO      Controllers
+        │              │              │
+        └──────────────┼──────────────┘
+                    TypeORM
+                       │
+                    MySQL
+```
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 Bhetiyo/
 ├── backend/
-│   ├── index.js                    # Entry point — bootstraps Express, Socket.IO, DB
+│   ├── index.js
 │   ├── package.json
 │   └── src/
 │       ├── config/
-│       │   ├── database.js         # TypeORM MySQL DataSource configuration
-│       │   ├── middleware.js       # Express middleware setup (cors, session, etc.)
-│       │   ├── passport.js         # Google OAuth 2.0 strategy
-│       │   └── socketio.js         # Socket.IO server configuration
-│       ├── controllers/            # Route handler logic (in progress)
+│       │   ├── database.js
+│       │   ├── middleware.js
+│       │   ├── passport.js
+│       │   └── socketio.js
+│       ├── controllers/
 │       ├── entities/
-│       │   └── User.js             # TypeORM User entity
-│       ├── middleware/             # Custom Express middleware (in progress)
+│       │   └── User.js
+│       ├── middleware/
 │       └── routes/
-│           ├── index.js            # Registers all route groups
-│           └── auth.js             # Google OAuth routes (/auth/google)
+│           ├── index.js
+│           └── auth.js
 │
 ├── frontend/
-│   ├── index.html                  # HTML entry point
-│   ├── vite.config.ts              # Vite configuration
-│   ├── tsconfig.json
-│   ├── components.json             # shadcn/ui config
 │   ├── package.json
 │   ├── public/
-│   │   ├── founditems/             # Static assets for found item images
-│   │   ├── lostitems/              # Static assets for lost item images
-│   │   └── homepage/               # Static assets for homepage
 │   └── src/
-│       ├── main.tsx                # React app entry point
-│       ├── App.tsx                 # Root component — sets up router
-│       ├── index.css               # Global styles
-│       ├── vite-env.d.ts
 │       ├── api/
-│       │   ├── client.ts           # Axios instance with base URL & interceptors
-│       │   └── index.ts            # Exported API functions
-│       ├── assets/                 # Images and static media
+│       ├── assets/
 │       ├── components/
-│       │   ├── NavigationBar.tsx   # Top navigation bar
-│       │   ├── Footer.tsx          # Page footer
-│       │   ├── Signup.tsx          # Sign up / login modal
-│       │   ├── UserProfile.tsx     # User profile dropdown/page
-│       │   └── ui/
-│       │       └── button.tsx      # shadcn/ui Button component
-│       ├── contexts/               # React Contexts (in progress)
-│       ├── data/                   # Static / mock data (in progress)
-│       ├── hooks/                  # Custom React hooks (in progress)
+│       ├── contexts/
+│       ├── data/
+│       ├── hooks/
 │       ├── lib/
-│       │   └── utils.ts            # Tailwind class merge utility (cn)
 │       ├── pages/
-│       │   ├── Home.tsx            # Homepage
-│       │   ├── NotFound.tsx        # 404 page (picks a random variant)
-│       │   └── 404/                # 404 page design variants (Variant_0 – Variant_6)
 │       ├── routes/
-│       │   └── routes.tsx          # React Router route definitions
 │       ├── store/
-│       │   ├── data/               # Zustand data stores (in progress)
-│       │   └── ui/
-│       │       └── navigationBar.tsx   # Zustand store for nav bar state
 │       ├── types/
-│       │   └── ui/components/
-│       │       └── navigation_bar.ts   # TypeScript types for NavigationBar
-│       └── utils/                  # Helper/utility functions (in progress)
+│       └── utils/
 │
 └── README.md
+```
+
+---
+
+## 📸 Screenshots
+
+> Add screenshots of your application here.
+
+Example:
+
+```
+docs/
+├── home.png
+├── dashboard.png
+├── lost-items.png
+├── found-items.png
+├── item-details.png
+└── chat.png
 ```
 
 ---
@@ -126,81 +217,168 @@ Bhetiyo/
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v18 or above
-- MySQL database
-- A Google Cloud project with OAuth 2.0 credentials
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/Devrajchapai/Bhetiyo.git
-   cd Bhetiyo
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   cd frontend && npm install
-   cd ../backend && npm install
-   ```
-
-3. **Configure environment variables**
-
-   Create a `.env` file in the `backend/` directory:
-
-   ```env
-   PORT=5000
-   HOST=localhost
-
-   DB_HOSTNAME=localhost
-   DB_PORT=3306
-   DB_USERNAME=your_db_user
-   DB_PASSWORD=your_db_password
-   DB_NAME=bhetiyo
-   DB_SYNCHRONIZATON=true
-
-   GOOGLE_CLIENT_ID=your_google_client_id
-   GOOGLE_CLIENT_SERECT=your_google_client_secret
-   GOOGLE_CALLBACK_URL=http://localhost:5000/auth/google/callback
-
-   FRONTEND_URL=http://localhost:5173
-
-   SESSION_SECRET=your_session_secret
-   ```
-
-### Running the App
-
-**Start the backend:**
-
-```bash
-cd backend
-npm run dev
-```
-
-**Start the frontend:**
-
-```bash
-cd frontend
-npm run dev
-```
-
-Open your browser at `http://localhost:5173`
+- Node.js v18+
+- MySQL
+- Google Cloud OAuth Credentials
 
 ---
 
-## 📄 License
+### Clone the Repository
 
-This project is open source. See the [LICENSE](LICENSE) file for details.
+```bash
+git clone https://github.com/Devrajchapai/Bhetiyo.git
+
+cd Bhetiyo
+```
+
+---
+
+### Install Dependencies
+
+Frontend
+
+```bash
+cd frontend
+
+npm install
+```
+
+Backend
+
+```bash
+cd backend
+
+npm install
+```
+
+---
+
+### Configure Environment Variables
+
+Create a `.env` file inside the **backend** directory.
+
+```env
+PORT=5000
+HOST=localhost
+
+DB_HOSTNAME=localhost
+DB_PORT=3306
+DB_USERNAME=your_db_username
+DB_PASSWORD=your_db_password
+DB_NAME=bhetiyo
+DB_SYNCHRONIZATION=true
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_CALLBACK_URL=http://localhost:5000/auth/google/callback
+
+FRONTEND_URL=http://localhost:5173
+
+SESSION_SECRET=your_session_secret
+```
+
+---
+
+### Run the Backend
+
+```bash
+cd backend
+
+npm run dev
+```
+
+---
+
+### Run the Frontend
+
+```bash
+cd frontend
+
+npm run dev
+```
+
+Open your browser:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🚀 Future Roadmap
+
+Planned features include:
+
+- 🤖 AI-powered image matching
+- 📍 Interactive map integration
+- 🔔 Email notifications
+- 📱 Progressive Web App (PWA)
+- 📲 Native Android application
+- 🍎 Native iOS application
+- 🛡️ Admin moderation dashboard
+- ❤️ Save/Favorite posts
+- 🏆 Community leaderboard
+- 🎖️ Verified ownership system
+- 📊 Analytics dashboard
+
+---
+
+## 🤝 Contributing
+
+Contributions are always welcome!
+
+1. Fork the repository
+2. Create a new feature branch
+
+```bash
+git checkout -b feature/new-feature
+```
+
+3. Commit your changes
+
+```bash
+git commit -m "Add new feature"
+```
+
+4. Push your branch
+
+```bash
+git push origin feature/new-feature
+```
+
+5. Open a Pull Request
+
+---
+
+## 🌐 Live Demo
+
+**Visit Bhetiyo:**
+
+https://bhetiyo-seven.vercel.app/
 
 ---
 
 ## 👨‍💻 Author
 
 **Devraj Chapai**
-- GitHub: [@Devrajchapai](https://github.com/Devrajchapai)
+
+GitHub: https://github.com/Devrajchapai
 
 ---
 
-> *Helping the Nepali community reunite with what matters most.* 🇳🇵
+## ⭐ Support
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
+
+Your support motivates future improvements and helps more developers discover the project.
+
+---
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+---
+
+> **Helping communities reunite with what matters most. 🇳🇵**
+````
