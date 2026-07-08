@@ -1,12 +1,6 @@
 ````markdown
 # 🔍 Bhetiyo — भेटियो
 
-![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
-![Node.js](https://img.shields.io/badge/Node.js-Express-green?logo=node.js)
-![MySQL](https://img.shields.io/badge/MySQL-TypeORM-blue?logo=mysql)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-
 > **"Bhetiyo"** means **"Found"** in Nepali.  
 > A modern community-driven Lost & Found platform that helps reunite people with their lost belongings.
 
@@ -302,24 +296,6 @@ Open your browser:
 ```
 http://localhost:5173
 ```
-
----
-
-## 🚀 Future Roadmap
-
-Planned features include:
-
-- 🤖 AI-powered image matching
-- 📍 Interactive map integration
-- 🔔 Email notifications
-- 📱 Progressive Web App (PWA)
-- 📲 Native Android application
-- 🍎 Native iOS application
-- 🛡️ Admin moderation dashboard
-- ❤️ Save/Favorite posts
-- 🏆 Community leaderboard
-- 🎖️ Verified ownership system
-- 📊 Analytics dashboard
 
 ---
 
