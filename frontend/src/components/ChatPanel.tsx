@@ -37,31 +37,35 @@ export const ChatPanel = () => {
   }, [isConnected, token]);
 
   useEffect(() => {
-    if (isOpen && isConnected) {
-      fetchConversations();
-    }
+    if (!isOpen || !isConnected) return;
+    fetchConversations();
   }, [isOpen]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const socket = getSocket();
-      if (!socket) return;
-      const handleUpdate = () => fetchConversations();
-      socket.on("message:new", handleUpdate);
-      socket.on("conversation:closed", handleUpdate);
-      clearInterval(interval);
-    }, 500);
-    return () => clearInterval(interval);
-  }, []);
+    if (!isConnected) return;
+    const socket = getSocket();
+    if (!socket) return;
+
+    const handleNewMessage = (msg: any) => {
+      useChat.getState().addMessage(msg);
+    };
+
+    const handleClosed = () => {
+      fetchConversations();
+    };
+
+    socket.on("message:new", handleNewMessage);
+    socket.on("conversation:closed", handleClosed);
+
+    return () => {
+      socket.off("message:new", handleNewMessage);
+      socket.off("conversation:closed", handleClosed);
+    };
+  }, [isConnected, isOpen]);
 
   const handleBack = () => {
     useChat.getState().clearActiveConversation();
   };
-
-  const unreadTotal = conversations.reduce(
-    (sum, c) => sum + (c.unreadCount || 0),
-    0,
-  );
 
   if (!isConnected) return null;
 
@@ -143,11 +147,6 @@ export const ChatPanel = () => {
           ) : (
             <MessageCircle className="w-6 h-6" />
           )}
-          {!isOpen && unreadTotal > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center ring-2 ring-white">
-              {unreadTotal > 9 ? "9+" : unreadTotal}
-            </span>
-          )}
         </button>
       </div>
     </>
@@ -203,7 +202,7 @@ const ConversationListItem = ({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <h4 className="font-semibold text-slate-800 text-sm truncate shrink min-w-0">
+            <h4 className="text-sm font-semibold text-slate-800 truncate shrink min-w-0">
               {displayName}
             </h4>
             {conversation.item?.title && conversation.type === "private" && (

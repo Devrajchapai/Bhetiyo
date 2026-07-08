@@ -24,7 +24,6 @@ export interface ConversationItem {
   } | null;
   participants: Participant[];
   lastMessage: MessageData | null;
-  unreadCount: number;
   is_uploader: boolean;
 }
 
@@ -181,11 +180,25 @@ export const useChat = create<ChatState>((set, get) => ({
     set((state) => {
       const existing = state.messages[message.conversation_id] || [];
       if (existing.some((m) => m.id === message.id)) return state;
+
       return {
         messages: {
           ...state.messages,
           [message.conversation_id]: [...existing, message],
         },
+        conversations: state.conversations
+          .map((c) =>
+            c.id === message.conversation_id ? { ...c, lastMessage: message } : c,
+          )
+          .sort((a, b) => {
+            const aTime = a.lastMessage
+              ? new Date(a.lastMessage.created_at).getTime()
+              : new Date(a.created_at).getTime();
+            const bTime = b.lastMessage
+              ? new Date(b.lastMessage.created_at).getTime()
+              : new Date(b.created_at).getTime();
+            return bTime - aTime;
+          }),
       };
     });
   },

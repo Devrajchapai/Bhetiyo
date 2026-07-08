@@ -142,10 +142,6 @@ export const getConversations = async (req, res) => {
           order: { created_at: "DESC" },
         });
 
-        const unreadCount = await messageRepo.count({
-          where: { conversation_id: conv.id },
-        });
-
         const item = await itemRepo.findOne({
           where: { group_id: conv.item_group_id },
           select: ["title", "group_id", "source", "slug", "user_id"],
@@ -158,15 +154,20 @@ export const getConversations = async (req, res) => {
           item: item || null,
           participants: participantUsers.filter(Boolean),
           lastMessage: lastMessage || null,
-          unreadCount,
           is_uploader,
         };
       }),
     );
 
-    conversationsWithMeta.sort(
-      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-    );
+    conversationsWithMeta.sort((a, b) => {
+      const aTime = a.lastMessage
+        ? new Date(a.lastMessage.created_at).getTime()
+        : new Date(a.created_at).getTime();
+      const bTime = b.lastMessage
+        ? new Date(b.lastMessage.created_at).getTime()
+        : new Date(b.created_at).getTime();
+      return bTime - aTime;
+    });
 
     res.json({ data: conversationsWithMeta });
   } catch (error) {
