@@ -47,7 +47,13 @@ const buildContributors = async (itemRepo, userRepo) => {
     });
 };
 
-const enrichItems = async (imageRepo, items) => {
+const enrichItems = async (imageRepo, conversationRepo, items) => {
+  const closedConversations = await conversationRepo.find({
+    where: { is_closed: true },
+    select: ["item_group_id"],
+  });
+  const resolvedGroupIds = new Set(closedConversations.map((c) => c.item_group_id));
+
   return Promise.all(
     items.map(async (item) => {
       const img = await imageRepo.findOne({
@@ -63,6 +69,7 @@ const enrichItems = async (imageRepo, items) => {
         image: img?.url || null,
         slug: item.slug || item.group_id,
         buttonText: item.source.toLowerCase() === "found" ? "That's mine!" : "Found this?",
+        resolved: resolvedGroupIds.has(item.group_id),
       };
     }),
   );
@@ -91,7 +98,7 @@ export const getHomeData = async (req, res) => {
 
     const imageUrls = homepageImages?.resources?.map((r) => r.secure_url) || [];
 
-    const recentItems = await enrichItems(imageRepo, allItems.slice(0, 20));
+    const recentItems = await enrichItems(imageRepo, conversationRepo, allItems.slice(0, 20));
     const topContributors = await buildContributors(itemRepo, userRepo);
 
     const returnRate = totalItems > 0

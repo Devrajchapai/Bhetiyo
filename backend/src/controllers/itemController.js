@@ -19,6 +19,7 @@ export const getItems = async (req, res) => {
   try {
     const itemRepo = BhetiyoDataSource.getRepository("Item");
     const imageRepo = BhetiyoDataSource.getRepository("Image");
+    const conversationRepo = BhetiyoDataSource.getRepository("Conversation");
 
     const { source, search } = req.query;
 
@@ -53,6 +54,12 @@ export const getItems = async (req, res) => {
 
     const items = await query.getMany();
 
+    const closedConversations = await conversationRepo.find({
+      where: { is_closed: true },
+      select: ["item_group_id"],
+    });
+    const resolvedGroupIds = new Set(closedConversations.map((c) => c.item_group_id));
+
     const itemsWithImages = await Promise.all(
       items.map(async (item) => {
         const image = await imageRepo.findOne({
@@ -63,6 +70,7 @@ export const getItems = async (req, res) => {
           ...item,
           slug: item.slug || `${item.group_id}`,
           image: image?.url || null,
+          resolved: resolvedGroupIds.has(item.group_id),
         };
       }),
     );
@@ -80,6 +88,7 @@ export const getItemByGroup = async (req, res) => {
 
     const itemRepo = BhetiyoDataSource.getRepository("Item");
     const imageRepo = BhetiyoDataSource.getRepository("Image");
+    const conversationRepo = BhetiyoDataSource.getRepository("Conversation");
 
     const item = await itemRepo.findOne({ where: { group_id } });
 
@@ -87,12 +96,18 @@ export const getItemByGroup = async (req, res) => {
       return res.status(404).json({ error: "Item not found" });
     }
 
-    const images = await imageRepo.find({
-      where: { group_id },
-      select: ["id", "url"],
-    });
+    const [images, resolvedConv] = await Promise.all([
+      imageRepo.find({
+        where: { group_id },
+        select: ["id", "url"],
+      }),
+      conversationRepo.findOne({
+        where: { item_group_id: group_id, is_closed: true },
+        select: ["id"],
+      }),
+    ]);
 
-    res.status(200).json({ data: { ...item, images } });
+    res.status(200).json({ data: { ...item, images, resolved: !!resolvedConv } });
   } catch (error) {
     console.error("Failed to fetch item:", error);
     res.status(500).json({ error: "Failed to fetch item" });
@@ -106,6 +121,7 @@ export const getItemBySlug = async (req, res) => {
     const itemRepo = BhetiyoDataSource.getRepository("Item");
     const imageRepo = BhetiyoDataSource.getRepository("Image");
     const userRepo = BhetiyoDataSource.getRepository("User");
+    const conversationRepo = BhetiyoDataSource.getRepository("Conversation");
 
     let item = await itemRepo.findOne({ where: { slug } });
 
@@ -117,7 +133,7 @@ export const getItemBySlug = async (req, res) => {
       return res.status(404).json({ error: "Item not found" });
     }
 
-    const [images, poster] = await Promise.all([
+    const [images, poster, resolvedConv] = await Promise.all([
       imageRepo.find({
         where: { group_id: item.group_id },
         select: ["id", "url"],
@@ -128,9 +144,13 @@ export const getItemBySlug = async (req, res) => {
             select: ["id", "name", "email"],
           })
         : Promise.resolve(null),
+      conversationRepo.findOne({
+        where: { item_group_id: item.group_id, is_closed: true },
+        select: ["id"],
+      }),
     ]);
 
-    res.status(200).json({ data: { ...item, images, poster } });
+    res.status(200).json({ data: { ...item, images, poster, resolved: !!resolvedConv } });
   } catch (error) {
     console.error("Failed to fetch item by slug:", error);
     res.status(500).json({ error: "Failed to fetch item" });

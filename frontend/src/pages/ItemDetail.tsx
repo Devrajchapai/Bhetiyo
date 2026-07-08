@@ -2,7 +2,7 @@ import { api } from "@/api";
 import { useAuth } from "@/store/data/auth";
 import { useChat } from "@/store/data/chat";
 import { useNavigationBar } from "@/store/ui/navigationbar";
-import { AlertTriangle, ArrowLeft, Calendar, ChevronLeft, ChevronRight, Loader2, MapPin, MessageCircle, User } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Calendar, ChevronLeft, ChevronRight, CheckCheck, Loader2, MapPin, MessageCircle, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -179,7 +179,7 @@ export const ItemDetail = () => {
           </div>
 
           <div className="space-y-6">
-            <div>
+            <div className="flex gap-2">
               <span
                 className={`inline-block text-xs font-bold px-3 py-1 rounded-full text-white tracking-wider ${
                   item.source?.toUpperCase() === "FOUND"
@@ -189,6 +189,12 @@ export const ItemDetail = () => {
               >
                 {item.source?.toUpperCase() || "FOUND"}
               </span>
+              {item.resolved && (
+                <span className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full text-white tracking-wider bg-emerald-600">
+                  <CheckCheck className="w-3 h-3" />
+                  Returned
+                </span>
+              )}
             </div>
 
             <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
@@ -238,20 +244,27 @@ export const ItemDetail = () => {
             </div>
 
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={handleClaim}
-                disabled={claiming}
-                className="flex-1 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
-              >
-                {claiming ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <MessageCircle className="w-4 h-4" />
-                )}
-                {item.source?.toLowerCase() === "found"
-                  ? "Claim This Item"
-                  : "I Found This"}
-              </button>
+              {item.resolved ? (
+                <div className="flex-1 px-6 py-3 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 font-medium text-sm flex items-center justify-center gap-2">
+                  <CheckCheck className="w-4 h-4" />
+                  Returned to owner
+                </div>
+              ) : (
+                <button
+                  onClick={handleClaim}
+                  disabled={claiming}
+                  className="flex-1 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
+                >
+                  {claiming ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <MessageCircle className="w-4 h-4" />
+                  )}
+                  {item.source?.toLowerCase() === "found"
+                    ? "Claim This Item"
+                    : "I Found This"}
+                </button>
+              )}
             </div>
           </div>
         </div>
