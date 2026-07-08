@@ -28,6 +28,10 @@ export const configureSocketIO = (server) => {
   io.on("connection", (socket) => {
     console.log("Client connected: " + socket.user?.name || socket.id);
 
+    if (socket.user?.id) {
+      socket.join(`user:${socket.user.id}`);
+    }
+
     socket.on("join:conversation", (conversationId) => {
       socket.join(`conversation:${conversationId}`);
       console.log(`${socket.user?.name} joined conversation:${conversationId}`);

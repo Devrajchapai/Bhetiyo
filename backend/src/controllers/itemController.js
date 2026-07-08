@@ -1,5 +1,6 @@
 import { BhetiyoDataSource } from "../config/database.js";
 import crypto from "node:crypto";
+import { findMatchesForItem } from "../utils/itemMatcher.js";
 
 const toKebabCase = (str) =>
   str
@@ -195,6 +196,10 @@ export const storeItem = async (req, res) => {
       message: "Item stored successfully",
       data: { groupId, images: savedImages.map((img) => ({ id: img.id, url: img.url })) },
     });
+
+    findMatchesForItem(groupId, req.app.get("io")).catch((err) =>
+      console.error("Background matching failed:", err),
+    );
   } catch (error) {
     console.error("Failed to store item:", error);
     res.status(500).json({ error: "Failed to store item" });
