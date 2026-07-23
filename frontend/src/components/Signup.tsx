@@ -137,7 +137,7 @@ export const SignUp = () => {
           </Button>
 
           {/* Facebook Button */}
-          <Button
+          {/* <Button
             variant="outline"
             className="w-full flex items-center justify-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer"
             disabled={true}
@@ -146,10 +146,10 @@ export const SignUp = () => {
               <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
             </svg>
             Facebook
-          </Button>
+          </Button> */}
 
           {/* Corrected TikTok Button */}
-          <Button
+          {/* <Button
             variant="outline" // Changed from 'outline' to 'ghost' to remove the border
             className="w-full flex items-center justify-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer"
             disabled={true}
@@ -163,7 +163,7 @@ export const SignUp = () => {
               <path d="M448 209.91a210.06 210.06 0 0 1-122.77-39.25V349.38A162.55 162.55 0 1 1 185 188.31V278.2a74.62 74.62 0 1 0 52.23 71.18V0l88 0a121.18 121.18 0 0 0 1.86 22.17h.06a120.25 120.25 0 0 0 47.66 79.52 119.5 119.5 0 0 0 73.19 25.43V209.91z" />
             </svg>
             TikTok
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
